@@ -1,0 +1,58 @@
+.items-section {
+  height: 235px;
+  width: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
+.items-section .items-container {
+  height: 100%;
+  width: 100%;
+  display: -ms-grid;
+  display: grid;
+}
+
+.items-section .items-container .items-info {
+  width: 90%;
+  position: absolute;
+  bottom: 0;
+  right: 50%;
+  -webkit-transform: translate(50%, 0);
+          transform: translate(50%, 0);
+}
+
+.items-section .items-container .items-info h1, .items-section .items-container .items-info p {
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+  line-height: 2rem;
+  color: #000;
+}
+
+.items-section .items-container .items-info h1 {
+  font-size: 1rem;
+}
+
+.items-section .items-container .items-info p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1rem;
+  margin: 5px 0 20px;
+}
+
+.items-section .items-container .items-info p span {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 1366px) and (min-height: 1366px) {
+  .items-section {
+    height: 300px;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .items-section {
+    height: 300px;
+  }
+}
+/*# sourceMappingURL=Items.css.map */

@@ -1,0 +1,98 @@
+@mixin margin-padding-zero {
+    margin: 0;
+    padding: 0;
+}
+
+$width: 15px;
+$height: 15px;
+
+
+.item-detail-container {
+    position: relative;
+    display: grid;
+    grid-template-rows: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    background-color: #fff;
+    .add-item-container {
+        @include margin-padding-zero;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        section {
+            width: 80%;
+            display: grid;
+            grid-template-columns: 1fr;
+            .item-info {
+                h1 {
+                    margin: 40% 0 0;
+                    text-transform: uppercase;
+                }
+                .item-number {
+                    margin: 5px 0;
+                    font-size: 0.8rem;
+                }
+                .item-price {
+                    margin: 30px 0 10px;
+                    font-size: 1.5rem;
+                }
+            }
+            .buy-item-info {
+                width: 100%;
+                div {
+                    display: flex;
+                    justify-content: flex-start;
+                    padding-top: 2px;
+                }
+                .add-button {
+                    margin-top: 30px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1366px) and (min-height: 1366px) {
+    .item-detail-container {
+        grid-template-rows: 1fr auto;
+        grid-template-columns: repeat(1, 1fr);
+        .add-item-container {
+            section {
+                width: 90%;
+                grid-template-columns: 2fr;
+                .item-info {
+                    h1 {
+                        margin: 2% 0 0;
+                    }
+                }
+                .buy-item-info {
+                    .add-button {
+                        margin-bottom: 40px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 980px) {
+    .item-detail-container {
+        grid-template-rows: 1fr auto;
+        grid-template-columns: repeat(1, 1fr);
+        .add-item-container {
+            section {
+                width: 90%;
+                grid-template-columns: 2fr;
+                .item-info {
+                    h1 {
+                        margin: 2% 0 0;
+                    }
+                }
+                .buy-item-info {
+                    .add-button {
+                        margin-bottom: 20px;
+                    }
+                }
+            }
+        }
+    }
+}

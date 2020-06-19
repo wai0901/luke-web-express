@@ -1,0 +1,51 @@
+$white: #fff;
+$black: #000;
+$bgColor: #CFCFCF;
+$containerColor: #E5E5E5;
+
+
+@mixin margin-padding-zero {
+    margin: 0;
+    padding: 0;
+}
+
+.bg {
+    @include margin-padding-zero;
+    display: flex;
+    justify-content: center;
+    background: $bgColor;
+    .container {
+        position: relative;
+        width: 1366px;
+        @include margin-padding-zero;
+        display: grid;
+        background-color: $containerColor;
+        justify-items: center;  
+        .holder {
+            position: relative;
+            width: 90%;
+        }
+    }
+    .bg-shader {
+        position: fixed;
+        background-color: $containerColor;
+        height: 100vh;
+        width: 1366px;
+    }
+}
+
+
+.fade-appear, .slide-enter {
+    opacity: 0;
+}
+.fade-appear-active, .slide-enter .slide-enter-active {
+    opacity: 1;
+    transition: opacity 200ms linear 150ms;
+}
+.fade-exit {
+    opacity: 1;
+}
+.fade-exit.slide-exit-active {
+    opacity: 0;
+    transition: opacity 200ms linear;
+}

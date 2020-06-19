@@ -1,0 +1,54 @@
+@mixin margin-padding-zero {
+    margin: 0;
+    padding: 0;
+}
+
+.items-section {
+    height: 235px;
+    width: 100%;
+    position: relative;
+    cursor: pointer;
+    .items-container {
+        height: 100%;
+        width: 100%;
+        display: grid;
+        .items-info {
+            width: 90%;
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translate(50%, 0);
+            h1, p {
+                @include margin-padding-zero;
+                text-transform: uppercase;
+                line-height: 2rem;
+                color: #000;
+            }
+            h1 {
+                
+                font-size: 1rem;
+            }
+            p {
+                font-size: 1.5rem;
+                font-weight: bold;
+                line-height: 1rem;
+                margin: 5px 0 20px;
+                span {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1366px) and (min-height: 1366px) {
+    .items-section {
+        height: 300px;
+    }
+}
+
+@media screen and (max-width: 980px) {
+    .items-section {
+        height: 300px;
+    }
+}

@@ -1,0 +1,110 @@
+.header-container {
+  height: 100px;
+  width: 90%;
+  position: relative;
+  z-index: 4;
+  background-color: #E5E5E5;
+  pointer-events: none;
+}
+
+.header-container section {
+  height: 100px;
+  width: inherit;
+  padding-bottom: 2px;
+  max-width: 1235px;
+  position: fixed;
+  background-color: #E5E5E5;
+}
+
+.header-container section .header {
+  height: 100%;
+  width: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 5fr 1fr;
+      grid-template-columns: 1fr 5fr 1fr;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+.header-container section .header .logo {
+  margin-bottom: 15px;
+}
+
+.header-container section .header .menu {
+  position: relative;
+  width: 100%;
+  display: -ms-grid;
+  display: grid;
+  margin-bottom: 30px;
+}
+
+.header-container section .header .shop {
+  margin: 0;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.header-container section .m-button-container {
+  position: absolute;
+  display: none;
+  height: 100vh;
+  width: 100%;
+  pointer-events: none;
+}
+
+.header-container section .m-button-container:active {
+  background-color: #ee838f;
+}
+
+@media screen and (max-width: 980px) {
+  .header-container section .header {
+    -ms-grid-columns: (1fr)[3];
+        grid-template-columns: repeat(3, 1fr);
+  }
+  .header-container section .header .menu {
+    margin-bottom: -20px;
+  }
+  .header-container section .m-button-container {
+    display: -ms-grid;
+    display: grid;
+  }
+  .header-container section .m-button-container .m-button-group {
+    -webkit-transition: all 300ms ease-in-out;
+    transition: all 300ms ease-in-out;
+    height: 120px;
+    width: 120px;
+    background-color: #eb4559;
+    border-radius: 50%;
+    position: fixed;
+    left: 50%;
+    -webkit-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
+    text-align: center;
+    z-index: 4;
+    pointer-events: fill;
+    cursor: pointer;
+  }
+  .header-container section .m-button-container .m-button-group .menu-button {
+    position: absolute;
+    list-style: none;
+    left: 50%;
+    -webkit-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
+    font-size: 1.5rem;
+    color: #fff;
+  }
+  .header-container section .m-button-container .m-button-group .up {
+    top: 50px;
+  }
+  .header-container section .m-button-container .m-button-group .down {
+    top: -10px;
+  }
+}
+/*# sourceMappingURL=Header.css.map */

@@ -1,0 +1,67 @@
+.cart-container {
+  background-color: #fff;
+  width: 100%;
+  min-height: 690px;
+}
+
+.cart-container .top-section {
+  position: relative;
+  height: 100px;
+  width: 100%;
+  text-align: center;
+}
+
+.cart-container .top-section .top-container {
+  position: fixed;
+  width: 90%;
+  max-width: 1230px;
+  top: 100px;
+  padding-top: 10px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid #CFCFCF;
+  background-color: #fff;
+  z-index: 2;
+}
+
+.cart-container .top-section .top-container .button {
+  position: relative;
+  top: 15px;
+  pointer-events: fill;
+}
+
+.cart-container .top-section .top-container .button h1 > span {
+  font-size: 1.2rem;
+}
+
+.cart-container .top-section .top-container .total {
+  top: -2px;
+}
+
+.cart-container .items-container {
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+.cart-container .items-container ul {
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.cart-container .items-container .empty-cart-message {
+  height: 400px;
+  width: 120px;
+  margin: auto;
+}
+
+.cart-container .items-container .empty-cart-message h2 {
+  margin-top: 100px;
+  font-size: 1.2rem;
+}
+/*# sourceMappingURL=ShoppingCart.css.map */

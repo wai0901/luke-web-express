@@ -1,0 +1,96 @@
+$containerColor: #E5E5E5;
+$hoverColor: #eb4559;
+$buttonPressed: #ee838f;
+
+.header-container {
+    height: 100px;
+    width: 90%;
+    position: relative;
+    z-index: 4;
+    background-color: $containerColor;
+    pointer-events: none;
+    section {
+        height: 100px;
+        width: inherit;
+        padding-bottom: 2px;
+        max-width: 1235px;
+        position: fixed;
+        background-color: $containerColor;
+        .header{
+            height: 100%;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 5fr 1fr;
+            align-items: flex-end;
+            .logo {
+                margin-bottom: 15px;
+            }
+            .menu {
+                position: relative;
+                width: 100%;
+                display: grid;
+                margin-bottom: 30px;
+                // justify-self: center;
+            }
+            .shop {
+                margin: 0;
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+            }
+        } 
+        .m-button-container {
+            position: absolute;
+            display: none;
+            height: 100vh;
+            width: 100%;
+            pointer-events: none;
+        }
+        .m-button-container:active {
+            background-color: $buttonPressed
+        }
+        @media screen and (max-width: 980px) {
+            .header {
+                grid-template-columns: repeat(3, 1fr);
+                .menu {
+                    margin-bottom: -20px;
+                }
+            }
+            .m-button-container {
+                display: grid;
+                .m-button-group {
+                    transition: all 300ms ease-in-out;
+                    height: 120px;
+                    width: 120px;
+                    background-color: $hoverColor;
+                    border-radius: 50%;
+                    position: fixed;
+                    left: 50%;
+                    // top: -65px;
+                    // bottom: -60px;
+                    transform: translate(-50%, 0);
+                    text-align: center;
+                    z-index: 4;
+                    pointer-events: fill;
+                    cursor: pointer;
+                    .menu-button {
+                        position: absolute;
+                        list-style: none;
+                        left: 50%;
+                        transform: translate(-50%, 0);
+                        font-size: 1.5rem;
+                        color: #fff;
+                    }
+                    .up {
+                        top: 50px;
+                    }
+                    .down {
+                        top: -10px;
+                    }
+                }
+            }
+        }
+
+    }
+}
+

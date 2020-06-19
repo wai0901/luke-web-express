@@ -1,0 +1,55 @@
+.bg {
+  margin: 0;
+  padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background: #CFCFCF;
+}
+
+.bg .container {
+  position: relative;
+  width: 1366px;
+  margin: 0;
+  padding: 0;
+  display: -ms-grid;
+  display: grid;
+  background-color: #E5E5E5;
+  justify-items: center;
+}
+
+.bg .container .holder {
+  position: relative;
+  width: 90%;
+}
+
+.bg .bg-shader {
+  position: fixed;
+  background-color: #E5E5E5;
+  height: 100vh;
+  width: 1366px;
+}
+
+.fade-appear, .slide-enter {
+  opacity: 0;
+}
+
+.fade-appear-active, .slide-enter .slide-enter-active {
+  opacity: 1;
+  -webkit-transition: opacity 200ms linear 150ms;
+  transition: opacity 200ms linear 150ms;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit.slide-exit-active {
+  opacity: 0;
+  -webkit-transition: opacity 200ms linear;
+  transition: opacity 200ms linear;
+}
+/*# sourceMappingURL=Main.css.map */

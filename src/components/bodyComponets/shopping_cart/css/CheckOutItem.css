@@ -1,0 +1,98 @@
+.item-container {
+  position: relative;
+  height: 250px;
+  width: 100%;
+  margin-bottom: 10px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 1fr;
+      grid-template-rows: 1fr;
+  -ms-grid-columns: 2fr 4fr;
+      grid-template-columns: 2fr 4fr;
+  list-style: none;
+  background-color: #fafafa;
+  z-index: 1;
+}
+
+.item-container .item-image {
+  height: 100%;
+  width: 100%;
+}
+
+.item-container .item-info {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 2fr 1fr;
+      grid-template-columns: 2fr 1fr;
+}
+
+.item-container .item-info .info-group h1 {
+  margin: 45px 0 0 20px;
+  text-transform: uppercase;
+}
+
+.item-container .item-info .info-group .item-number {
+  margin: 5px 0 0 20px;
+  font-size: 0.8rem;
+}
+
+.item-container .item-info .info-group .item-price {
+  margin: 30px 0 10px 20px;
+  font-size: 1.5rem;
+}
+
+.item-container .item-info .info-group .item-price span {
+  font-size: 1.2rem;
+}
+
+.item-container .item-info .info-group .item-description {
+  margin-left: 20px;
+  text-transform: uppercase;
+}
+
+.item-container .item-info .buttons-group {
+  height: 100%;
+}
+
+.item-container .item-info .buttons-group .buttons {
+  height: 100%;
+  position: relative;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: (1fr)[2];
+      grid-template-rows: repeat(2 1fr);
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.item-container .item-info .buttons-group .buttons div {
+  text-align: center;
+}
+
+@media screen and (max-width: 650px) {
+  .item-container {
+    height: auto;
+    -ms-grid-rows: 2fr;
+        grid-template-rows: 2fr;
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+  }
+  .item-container .item-image {
+    height: 200px;
+    width: 100%;
+  }
+  .item-container .item-info .info-group h1 {
+    font-size: 1.8rem;
+  }
+  .item-container .item-info .info-group .item-description {
+    font-size: 0.9rem;
+  }
+  .item-container .item-info .buttons-group p {
+    margin-top: 40px;
+  }
+}
+/*# sourceMappingURL=CheckOutItem.css.map */

@@ -1,0 +1,66 @@
+$hoverColor: #eb4559;
+
+@mixin margin-padding-zero {
+    margin: 0;
+    padding: 0;
+}
+
+.shop-container {
+    @include margin-padding-zero;
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    li {
+        margin: 0;
+        pointer-events: fill;
+    }
+}
+
+
+.modal-container > .container {
+    margin: 0 auto;
+    padding: 20px 40px 40px;
+    text-align: center;
+    background-color: rgb(224, 224, 224);
+    
+    h1 {
+        font-size: 1.8rem;
+        font-weight: 200;
+    }
+    input {
+        border: 1px solid rgba(252, 252, 252, 0.8);
+        background-color: rgba(252, 252, 252, 0.2);
+        width: 220px;
+        border-radius: 3px;
+        font-family: "Source Sans Pro", sans-serif;
+        padding: 10px 15px;
+        margin: 0 auto 10px auto;
+        display: block;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #444;
+        font-weight: 300;
+    }
+    button {
+        appearance: none;
+        outline: 0;
+        background-color: white;
+        border: 0;
+        padding: 10px 15px;
+        color: #5a5a5a;
+        border-radius: 3px;
+        width: 250px;
+        font-size: 18px;
+    }
+    .signup-container {
+        margin: 20px 0;   
+        .signup {
+            color: #444;
+            list-style: none;
+            font-size: 0.9rem;
+        }
+    }
+}
+.modal-container:focus {
+    outline:0 !important;
+}

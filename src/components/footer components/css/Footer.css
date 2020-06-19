@@ -1,0 +1,126 @@
+.footer-container {
+  position: relative;
+  bottom: 0;
+  height: 190px;
+  width: 90%;
+  list-style: none;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 5fr 2fr 5fr;
+      grid-template-columns: 5fr 2fr 5fr;
+  -ms-grid-rows: 1fr;
+      grid-template-rows: 1fr;
+}
+
+.footer-container .footer-links {
+  margin: 40px 0 0;
+  padding: 0;
+  width: 100%;
+  list-style: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.footer-container .footer-links li {
+  margin: 0 10px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.footer-container .footer-links li .link {
+  text-decoration: none;
+  color: #444;
+}
+
+.footer-container .footer-links li .link span {
+  position: relative;
+  top: -5px;
+}
+
+.footer-container .footer-links li .link:hover {
+  color: #eb4559;
+}
+
+.footer-container .social-group {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-top: 40px;
+}
+
+.footer-container .social-group a {
+  list-style: none;
+  margin: 0 5px;
+  color: #444;
+}
+
+.footer-container .social-group a:hover {
+  color: #eb4559;
+}
+
+.footer-container .newsletter {
+  width: 100%;
+  position: relative;
+  right: 0;
+}
+
+.footer-container .newsletter div {
+  margin-right: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.footer-container .newsletter div form {
+  margin: 0;
+  width: 30ch;
+}
+
+@media screen and (max-width: 980px) {
+  .footer-container {
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+    -ms-grid-rows: (1fr)[3];
+        grid-template-rows: repeat(3 1fr);
+  }
+  .footer-container .social-group {
+    -webkit-box-ordinal-group: 4;
+        -ms-flex-order: 3;
+            order: 3;
+    margin: 20px auto;
+    padding-bottom: 30px;
+  }
+  .footer-container .footer-links {
+    -webkit-box-ordinal-group: 3;
+        -ms-flex-order: 2;
+            order: 2;
+    margin: 30px 0 20px;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .footer-container .newsletter {
+    -webkit-box-ordinal-group: 2;
+        -ms-flex-order: 1;
+            order: 1;
+    height: 80px;
+  }
+  .footer-container .newsletter div {
+    margin-right: 0px;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+}
+/*# sourceMappingURL=Footer.css.map */

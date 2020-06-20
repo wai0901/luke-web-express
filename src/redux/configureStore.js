@@ -13,10 +13,10 @@ import { WebsiteDataReducer, initialState } from './websiteDataReducer';
 export const configureStore = () => {
     const store = createStore(
         combineReducers({
-            // mainPage: mainPageReducer,
-            // category: categoryReducer,
-            // items: itemsReducer,
-            // cartItem: cartReducer,
+            mainPage: mainPageReducer,
+            category: categoryReducer,
+            items: itemsReducer,
+            cartItem: cartReducer,
             websiteData: WebsiteDataReducer,
             initialState: initialState
             

@@ -10,62 +10,84 @@ import ItemDetail from './bodyComponets/SelectedCat/product_Items/ItemDetail';
 import ShoppingCart from './bodyComponets/shopping_cart/ShoppingCart';
 import Help from './bodyComponets/help/Help';
 import Contact from './bodyComponets/contact/Contact';
-import Signup from './bodyComponets/Signup/Signup';
+import Login from './bodyComponets/login/Login';
+import Signup from './bodyComponets/login/Signup';
 import Loading from './loading/Loading';
+import { fetchMainData, 
+    fetchCategoryData, 
+    fetchItemsData, 
+    postCartItems, 
+    updateCartItems, 
+    fetchCartData 
+   } from '../redux/ActionCreater';
 import { CSSTransition } from 'react-transition-group';
-import { postCartItems, updateCartItems, fetchCartData } from '../redux/ActionCreater';
 import './css/Main.css';
 
 
 
 const mapStateToProps = state => {
-
+    // console.log(state.cartItem.cart.data)
     return {
-        mainData: state.websiteData.websiteData.homeMenu,
-        categoryData: state.websiteData.websiteData,
-        itemsData: state.websiteData.websiteData.productsItems,
-        // inCartItems: state.cartItem.cart,
-        // catIsLoading: state.category.isLoading,
-        // inCartItemsLoading: state.cartItem.isLoading
+        mainData: state.mainPage.homeMenu.data,
+        categoryData: state.category.category.data,
+        itemsData: state.items.items.data,
+        inCartItems: state.cartItem.cart.data,
+        catIsLoading: state.category.isLoading,
+        inCartItemsLoading: state.cartItem.isLoading
     }
 }
 
 const mapDispatchToProps = {
+    fetchCategoryData: (link) => (fetchCategoryData(link)),
+    fetchItemsData: (link, categoryId) => (fetchItemsData(link, categoryId)),
     postCartItems: (cartItem) => (postCartItems(cartItem)),
     updateCartItems: (cartItem, id) => (updateCartItems(cartItem, id)),
-    fetchCartData
+    fetchMainData,
+    fetchCartData,
 };
 
 const Main = (props) => {
 
+
     const categoryData = props.categoryData;
     const itemsData = props.itemsData;
+    const inCartItems = props.inCartItems;
     const catIsLoading = props.catIsLoading;
 
     const [ pickedItem, setPickedItem ] = useState("")
     
 
     useEffect(() => {
-     
+        props.fetchMainData();
         props.fetchCartData();
     }, [])
     
+    const handleCatChange = (link) => 
+        props.fetchCategoryData(link);
+    
+
+    const handleHeaderCatChange = (link) => 
+        props.fetchCategoryData(link);
+    
+    const handleItemsChange = (link, categoryId) => 
+        props.fetchItemsData(link, categoryId);
 
     const handlePickedItem = (item) => 
         setPickedItem(item);
-    console.log(pickedItem)
+
 
 
     const addCartHandler = ({pickedItem, size, qty}) => {
-        console.log(pickedItem)
-        if (props.inCartItems) {
-            if(findCartItem(props.inCartItems, pickedItem, size)){
+        if (inCartItems) {
+            if(findCartItem(inCartItems, pickedItem, size)){
+                console.log(findCartItem(inCartItems, pickedItem, size))
                 //find and update the item which already in cart
-                let updatedItem = sameItemInCart(props.inCartItems, pickedItem, size, qty);
-                let updatedItemId = getId(props.inCartItems, pickedItem, size);
+                let updatedItem = sameItemInCart(inCartItems, pickedItem, size, qty);
+                let updatedItemId = updatedItem._id;
                 return props.updateCartItems(updatedItem, updatedItemId);
             } else {
                 props.postCartItems(addCartItem(pickedItem, size, qty));
+                console.log(addCartItem(pickedItem, size, qty))
             }
         } else {
             props.postCartItems(addCartItem(pickedItem, size, qty));
@@ -82,7 +104,8 @@ const Main = (props) => {
                 appear
                 >
                     <SelectedCat 
-                        categoryData={filteredObj(categoryData, match.params.menuId)}
+                        categoryData={categoryData}
+                        handleItemsChange={handleItemsChange}
                         catIsLoading={catIsLoading}
                     />
             </CSSTransition>
@@ -139,18 +162,20 @@ const Main = (props) => {
                 <div className="container">
                     <Header 
                         cartQty={cartQty}
-                        // handleHeaderCatChange={handleHeaderCatChange}
+                        handleHeaderCatChange={handleHeaderCatChange}
                     />
                     <div className="holder"> 
                         <Switch>                
                         <Route path="/" exact render={()=> 
                              <BodySection 
                                 mainData={props.mainData}
+                                handleCatChange={handleCatChange}
                              />
                         } />
                         <Route path="/help" exact component={Help}/>
                         <Route path="/contact" exact component={Contact}/>
                         <Route path="/signup" exact component={Signup}/>
+                        <Route path="/login" exact component={Login}/>
                         <Route path="/shopping-cart" exact render={() => 
                             <ShoppingCart 
                                 inCartItems={props.inCartItems}
@@ -191,19 +216,15 @@ const sameItemInCart = (cartItems, newItem, size, qty) => {
     }
 }
 
-//find Firebase item id
-const getId = (cartItems, newItem, size) => {
-    let foundItem = findCartItem(cartItems, newItem, size)
-    return foundItem._key;
-}
-
 //add new item to cart
 const addCartItem = (item, size, qty) => {
-    let id = item.productId.concat(size)
+    let productId = item.productId.concat(size)
+    let id = item.id.concat(size)
 
     return {
         ...item,
-        productId: id,
+        id: id,
+        productId: productId,
         size: size,
         quantity: qty,
         date: new Date().toISOString()
@@ -211,12 +232,12 @@ const addCartItem = (item, size, qty) => {
 }
 
 //filter object
-const filteredObj = (objs, objName) => {
-    let targetObj = [objName];
-    return Object.keys(objs).filter(key => targetObj.includes(key)).reduce((obj, key) => {
-    obj[key] = objs[key];
-    return obj;
-    }, {})};
+// const filteredObj = (objs, objName) => {
+//     let targetObj = [objName];
+//     return Object.keys(objs).filter(key => targetObj.includes(key)).reduce((obj, key) => {
+//     obj[key] = objs[key];
+//     return obj;
+//     }, {})};
 
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

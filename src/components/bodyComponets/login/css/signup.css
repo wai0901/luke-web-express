@@ -1,54 +1,38 @@
 .contact-container {
   width: 100%;
+  min-width: 400px;
+  min-height: 705px;
   background-color: #eee;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-transition: 500ms ease-in-out;
-  transition: 500ms ease-in-out;
 }
 
-.contact-container .cards-container {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: 1fr 1fr;
-      grid-template-columns: 1fr 1fr;
+.contact-container .card {
   position: relative;
-  margin: 70px auto;
-  width: 60%;
+  margin: 0 auto;
+  padding: 0 15px;
+  width: 100%;
+  max-width: 400px;
 }
 
-.contact-container .cards-container .card {
-  margin: 0;
-}
-
-.contact-container .cards-container .card h3 {
+.contact-container .card h3 {
   text-transform: uppercase;
 }
 
-.contact-container .cards-container .card p, .contact-container .cards-container .card a {
+.contact-container .card p, .contact-container .card a {
   margin: 20px 0;
   line-height: 1.5rem;
   text-decoration: none;
   color: #000;
 }
 
-.contact-container .cards-container .card .form-container {
+.contact-container .card .form-container {
   width: 100%;
 }
 
-.contact-container .cards-container .card .form-container .form-group {
+.contact-container .card .form-container .form-group {
   margin: 15px 0;
 }
 
-.contact-container .cards-container .card .form-container .form-group .label, .contact-container .cards-container .card .form-container .form-group .form-control {
+.contact-container .card .form-container .form-group .label, .contact-container .card .form-container .form-group .form-control {
   width: 100%;
   display: block;
   margin: 0 0 2px 0;
@@ -58,46 +42,72 @@
   border: none;
 }
 
-.contact-container .cards-container .card .form-container .form-group .label {
+.contact-container .card .form-container .form-group .label {
   font-size: 0.9rem;
 }
 
-.contact-container .cards-container .card .form-container .form-group .form-control {
+.contact-container .card .form-container .form-group .form-control {
   margin-top: 5px;
-  padding: 10px 0 10px 5px;
+  padding: 10px 0 10px 10px;
 }
 
-.contact-container .cards-container .card .form-container .form-group .check {
+.contact-container .card .form-container .form-group .check {
   margin: 0 0 20px;
   color: #444;
 }
 
-.contact-container .cards-container .card .form-container .form-group .text-warning {
+.contact-container .card .form-container .form-group .text-warning {
   margin-top: 5px;
   color: #eb4559;
   font-size: 0.8rem;
   line-height: 1rem;
 }
 
-.contact-container .cards-container .card .form-container .form-group .check-label {
+.contact-container .card .form-container .form-group .check-label {
   margin-top: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.contact-container .cards-container .card .form-container .form-group .check-label p {
+.contact-container .card .form-container .form-group .check-label p {
   position: relative;
   top: -2px;
   margin: 0 0 2px 3px;
   font-size: 0.9rem;
 }
 
-.contact-container .cards-container .card .form-container .button-group {
+.contact-container .card .form-container .state-and-zip-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-container .card .form-container .state-and-zip-container .state-and-zip-label {
+  margin: 0;
+  padding: 0;
+  width: 0;
+}
+
+.contact-container .card .form-container .state-and-zip-container .state-and-zip {
+  width: 50%;
+}
+
+.contact-container .card .form-container .state-and-zip-container .state-and-zip-left {
+  margin-right: 10%;
+}
+
+.contact-container .card .form-container .button-group {
   margin-top: 20px;
 }
 
-.contact-container .cards-container .card .form-container .button-group button {
+.contact-container .card .form-container .button-group button {
   padding: 10px 30PX;
   border-radius: 5px;
   border: 2px solid #777;
@@ -107,10 +117,32 @@
   transition: 0.1s ease-in-out;
 }
 
-.contact-container .cards-container .card .form-container .button-group button:hover {
+.contact-container .card .form-container .button-group button:hover {
   color: #fff;
   background-color: #eb4559;
   border: 2px solid #eb4559;
+}
+
+.contact-container .card .form-container .signup-container {
+  margin: 20px 0;
+}
+
+.contact-container .card .form-container .signup-container .signup {
+  color: #444;
+  list-style: none;
+  font-size: 0.9rem;
+}
+
+.contact-container .login-card {
+  max-width: 250px;
+  text-align: center;
+  padding: 20px 50px;
+  border-radius: 10px;
+  border: 1px solid #dddddd;
+}
+
+.contact-container .login-card .login-container .signup:hover {
+  color: #b4b4b4;
 }
 
 .contact-container .loading-container {

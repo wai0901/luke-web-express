@@ -15,7 +15,6 @@ const routes = [
 
 function Menu(props) {
 
-    // console.log(props.handleHeaderCatChange)
     const showMenu = {
         top: "0%",
         transition: "all 300ms ease-in-out",
@@ -33,7 +32,12 @@ function Menu(props) {
             <ul className="menu-group">
                 {
                     routes.map(route => (
-                        <li key={route.name}><Link to={route.path} className={route.class}>{route.name}</Link></li>
+                        <li key={route.name}><Link to={route.path} className={route.class}
+                        onClick={() => {
+                            props.handleHeaderCatChange(route.link);
+                            return props.linksHandler
+                            }}
+                        >{route.name}</Link></li>
                     ))
                 }
             </ul>

@@ -23,6 +23,7 @@ const BodySection = ({ mainData, handleCatChange }) => {
                 </div>
             </div>
             {
+                mainData &&
                 mainData.map(select => {
                     
                     const selection = {
@@ -32,7 +33,7 @@ const BodySection = ({ mainData, handleCatChange }) => {
                         return <div key={select.id} 
                                     style={selection} 
                                     className={select.style}
-                                    // onClick={() => handleCatChange(select.link)}
+                                    onClick={() => handleCatChange(select.link)}
                                     >
                             <Link to={"/" + select.link}>
                                 <div className="selection-container">

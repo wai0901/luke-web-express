@@ -7,7 +7,7 @@ const SelectedCat = ({ categoryData, handleItemsChange }) => {
     return ( <div className="body-container">
     {
         categoryData &&
-        Object.values(categoryData)[0].map(select => {
+        categoryData.map(select => {
             
             const selection = {
             background: `url('${select.image}') no-repeat center ${select.position} / cover`   
@@ -15,7 +15,7 @@ const SelectedCat = ({ categoryData, handleItemsChange }) => {
                 return <div key={select.id} 
                             style={selection} 
                             className={select.style}
-                            // onClick={() => handleItemsChange(select.link)}
+                            onClick={() => handleItemsChange(select.link, select.category)}
                             >
                     <Link to={`${'/' + select.category + '/' + select.link}`}>
                         <div className="selection-container">

@@ -57,16 +57,6 @@
   font-size: 18px;
 }
 
-.modal-container > .container .signup-container {
-  margin: 20px 0;
-}
-
-.modal-container > .container .signup-container .signup {
-  color: #444;
-  list-style: none;
-  font-size: 0.9rem;
-}
-
 .modal-container:focus {
   outline: 0 !important;
 }

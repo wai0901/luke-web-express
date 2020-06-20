@@ -7,6 +7,7 @@ const Items = (props) => {
 
   return ( <div className="body-container">
     {
+      props.itemsData &&
       props.itemsData.map(selectedItem => {
             const selection = {
             background: `url('${selectedItem.images[0]}') no-repeat center ${selectedItem.position} / cover`   

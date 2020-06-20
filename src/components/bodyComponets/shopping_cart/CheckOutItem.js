@@ -18,7 +18,6 @@ import './css/CheckOutItem.css';
 const CheckOutItem = ({item, changeQtyHandler}) => {
     
     const classes = useStyles();
-    
     const itemImage = {
         background: `url('${item.images[0]}') no-repeat center ${item.position} / cover`
     }  
@@ -37,13 +36,13 @@ const CheckOutItem = ({item, changeQtyHandler}) => {
                         <div>
                             <p>qty: {item.quantity}</p>
                             <ButtonGroup size="small" aria-label="small outlined button group">
-                                <Button onClick={() => changeQtyHandler(item, item._key, "plus")}>+</Button>
-                                <Button onClick={() => changeQtyHandler(item, item._key, "minus")}>-</Button>
+                                <Button onClick={() => changeQtyHandler(item, item._id, "plus")}>+</Button>
+                                <Button onClick={() => changeQtyHandler(item, item._id, "minus")}>-</Button>
                             </ButtonGroup>
                         </div>
                         <div>
                             <IconButton aria-label="delete" className={classes.margin}>
-                                <DeleteIcon onClick={() => changeQtyHandler(item, item._key, "remove")} fontSize="small" />
+                                <DeleteIcon onClick={() => changeQtyHandler(item, item._id, "remove")} fontSize="small" />
                             </IconButton>
                         </div>
                     </div>

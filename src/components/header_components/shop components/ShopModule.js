@@ -70,9 +70,11 @@ const ShopModule = ({cartQty}) => {
                     </IconButton>
                 </li> */}
                 <li>
-                    <IconButton aria-label="logIn">
-                        <LockOpen style={{ fontSize: 22 }} onClick={handleOpen} >Filled</LockOpen>
-                    </IconButton>
+                    <Link to={"/login"}>
+                        <IconButton aria-label="logIn">
+                            <LockOpen style={{ fontSize: 22 }}>Filled</LockOpen>
+                        </IconButton>
+                    </Link>
                 </li>
                 <li>
                     <Link to={"/shopping-cart"}>

@@ -1,0 +1,29 @@
+$linkColor: #444;
+$hoverColor: #eb4559;
+
+$width: 15px;
+$height: 15px;
+
+$bounce_height: 30px;
+
+.contact-container {
+    width: 100%;
+    background-color: #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: 500ms ease-in-out;
+    .cards-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        position: relative;
+        margin: 70px auto;
+        width: 60%;
+        .card {
+            margin: 0;
+            
+            
+        }
+    }
+}
+

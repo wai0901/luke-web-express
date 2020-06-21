@@ -13,12 +13,13 @@ import Contact from './bodyComponets/contact/Contact';
 import Login from './bodyComponets/login/Login';
 import Signup from './bodyComponets/login/Signup';
 import Loading from './loading/Loading';
+import OrdersData from './orders-data/OrderData';
 import { fetchMainData, 
     fetchCategoryData, 
     fetchItemsData, 
     postCartItems, 
     updateCartItems, 
-    fetchCartData 
+    fetchCartData,
    } from '../redux/ActionCreater';
 import { CSSTransition } from 'react-transition-group';
 import './css/Main.css';
@@ -26,14 +27,16 @@ import './css/Main.css';
 
 
 const mapStateToProps = state => {
-    // console.log(state.cartItem.cart.data)
+    console.log(state)
     return {
         mainData: state.mainPage.homeMenu.data,
         categoryData: state.category.category.data,
         itemsData: state.items.items.data,
         inCartItems: state.cartItem.cart.data,
+        loginStatus: state.login.login,
         catIsLoading: state.category.isLoading,
-        inCartItemsLoading: state.cartItem.isLoading
+        inCartItemsLoading: state.cartItem.isLoading,
+        loginIsLoading: state.login.isLoading
     }
 }
 
@@ -55,6 +58,7 @@ const Main = (props) => {
     const catIsLoading = props.catIsLoading;
 
     const [ pickedItem, setPickedItem ] = useState("")
+    const [ loginStatus, setLoginStatus ] = useState("")
     
 
     useEffect(() => {
@@ -62,10 +66,10 @@ const Main = (props) => {
         props.fetchCartData();
     }, [])
     
+
     const handleCatChange = (link) => 
         props.fetchCategoryData(link);
     
-
     const handleHeaderCatChange = (link) => 
         props.fetchCategoryData(link);
     
@@ -74,7 +78,6 @@ const Main = (props) => {
 
     const handlePickedItem = (item) => 
         setPickedItem(item);
-
 
 
     const addCartHandler = ({pickedItem, size, qty}) => {
@@ -161,6 +164,7 @@ const Main = (props) => {
             <Router>
                 <div className="container">
                     <Header 
+                        loginStatus={loginStatus}
                         cartQty={cartQty}
                         handleHeaderCatChange={handleHeaderCatChange}
                     />
@@ -176,6 +180,7 @@ const Main = (props) => {
                         <Route path="/contact" exact component={Contact}/>
                         <Route path="/signup" exact component={Signup}/>
                         <Route path="/login" exact component={Login}/>
+                        <Route path="/orders" exact component={OrdersData}/>
                         <Route path="/shopping-cart" exact render={() => 
                             <ShoppingCart 
                                 inCartItems={props.inCartItems}
@@ -192,6 +197,7 @@ const Main = (props) => {
             </Router>
             { props.mainLoading ||
               props.catIsLoading ||
+              props.loginIsLoading ||
               props.itemsDataLoading ? 
               <Loading /> : 
               null 

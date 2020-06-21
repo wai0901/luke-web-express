@@ -3,11 +3,9 @@ import thunk from 'redux-thunk';
 import { mainPageReducer } from './mainPageReducer';
 import { categoryReducer } from './categoryReducer';
 import { itemsReducer } from './itemsReducer';
-import { cartReducer } from './cartReducer'
-import { WebsiteDataReducer, initialState } from './websiteDataReducer';
-
-
-// import { ContactReducer } from './contactReducer';
+import { cartReducer } from './cartReducer';
+import { loginReducer } from './loginReducer';
+import { Auth } from './auth';
 
 
 export const configureStore = () => {
@@ -17,9 +15,8 @@ export const configureStore = () => {
             category: categoryReducer,
             items: itemsReducer,
             cartItem: cartReducer,
-            websiteData: WebsiteDataReducer,
-            initialState: initialState
-            
+            login: loginReducer,
+            auth: Auth,
         }),
         applyMiddleware(thunk)
     );

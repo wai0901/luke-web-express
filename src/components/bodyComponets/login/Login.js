@@ -2,22 +2,26 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom'
 import {Control, LocalForm, Errors } from 'react-redux-form';
+import { userLogin } from '../../../redux/ActionCreater';
 import './css/signup.css';
+
+const mapDispatchToProps = {
+    userLogin: (data) => (userLogin(data))
+};
 
 const required = val => val && val.length;
 const maxLength = len => val => !val || (val.length <= len);
 const minLength = len => val => val && (val.length >= len);
 
-const mapStateToProps = state => {
-    
-}
 
-const Contact = () => {
+const Contact = (props) => {
 
     const history = useHistory();
 
-    const handleLoginSubmit = (values) => {
-        values && history.goBack();
+    const handleLoginSubmit = (data) => {
+        props.userLogin(data)
+        // data && history.goBack();
+        // console.log(data)
     }
 
     return (
@@ -100,4 +104,4 @@ const Contact = () => {
     )
 }
 
-export default connect(mapStateToProps)(Contact);
+export default connect(null, mapDispatchToProps)(Contact);

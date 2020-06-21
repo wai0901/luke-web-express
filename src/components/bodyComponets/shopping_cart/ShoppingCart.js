@@ -4,12 +4,13 @@ import { useHistory } from 'react-router-dom'
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckOutItem from './CheckOutItem';
-import { fetchCartData, updateCartItems, removeCartItems } from '../../../redux/ActionCreater';
+import { fetchCartData, updateCartItems, removeCartItems, checkoutOrder } from '../../../redux/ActionCreater';
 import './css/ShoppingCart.css';
 
 const mapDispatchToProps = {
     updateCartItems: (cartItem, id) => (updateCartItems(cartItem, id)),
     removeCartItems: (id) => (removeCartItems(id)),
+    checkoutOrder: (order) => (checkoutOrder(order)),
     fetchCartData
 }
 
@@ -23,7 +24,35 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const ShoppingCart = ({inCartItems, cartTotal, updateCartItems, removeCartItems, fetchCartData}) => {
+const ShoppingCart = ({inCartItems, 
+                        cartTotal, 
+                        updateCartItems, 
+                        removeCartItems, 
+                        fetchCartData,
+                        checkoutOrder
+                    }) => {
+
+    //Temp
+    const handleOrderSubmit = () => {
+        let orders = inCartItems.map(item => {
+            return {
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                productId: item.productId,
+                quantity: item.quantity,
+                _id: item._id
+            }
+        })
+        let finalOrder = {
+            orders: orders,
+            orderTotal: cartTotal
+        }
+        checkoutOrder(finalOrder);
+    }
+
+
+
 
     useEffect(() => {
         fetchCartData();
@@ -75,7 +104,7 @@ const ShoppingCart = ({inCartItems, cartTotal, updateCartItems, removeCartItems,
                         <h1><span>$</span> {inCartItems ? cartTotal : "0.00"} <span>USD</span></h1>
                     </div>
                     <div className="button">
-                        <Button variant="outlined" size="small" className={classes.buttonStyle}>Check Out</Button>
+                        <Button variant="outlined" onClick={() => handleOrderSubmit()} size="small" className={classes.buttonStyle}>Check Out</Button>
                     </div>
                 </div>
             </div>

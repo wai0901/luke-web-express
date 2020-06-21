@@ -4,11 +4,9 @@ export const cartReducer = (state = { isLoading: false,
                                             errMess: null,
                                             cart: []}, action) => {
 
-
-
     switch(action.type) {
         case ActionTypes.FETCH_CART_LOADING:
-            return {...state, isLoading: true, errMess: null, category: []}
+            return {...state, isLoading: true, errMess: null, cart: []}
         
         case ActionTypes.FETCH_CART_DATA:
             return {...state, isLoading: false, errMess: null, cart: action.payload};

@@ -8,12 +8,13 @@ import SelectedCat from './bodyComponets/SelectedCat/SelectedCat';
 import Items from './bodyComponets/SelectedCat/product_Items/Items';
 import ItemDetail from './bodyComponets/SelectedCat/product_Items/ItemDetail';
 import ShoppingCart from './bodyComponets/shopping_cart/ShoppingCart';
+import Checkout from './bodyComponets/shopping_cart/checkout/Checkout';
 import Help from './bodyComponets/help/Help';
 import Contact from './bodyComponets/contact/Contact';
-import Login from './bodyComponets/login/Login';
 import Signup from './bodyComponets/login/Signup';
+import ThankYou from './bodyComponets/thank-you/ThankYou';
 import Loading from './loading/Loading';
-import OrdersData from './orders-data/OrderData';
+import Admin from './admin/Admin';
 import { fetchMainData, 
     fetchCategoryData, 
     fetchItemsData, 
@@ -26,6 +27,7 @@ import './css/Main.css';
 
 
 
+
 const mapStateToProps = state => {
     console.log(state)
     return {
@@ -33,10 +35,12 @@ const mapStateToProps = state => {
         categoryData: state.category.category.data,
         itemsData: state.items.items.data,
         inCartItems: state.cartItem.cart.data,
-        loginStatus: state.login.login,
+        authStatus: state.auth,
+        mainLoading: state.mainPage.isLoading,
         catIsLoading: state.category.isLoading,
+        itemsDataLoading: state.items.isLoading,
         inCartItemsLoading: state.cartItem.isLoading,
-        loginIsLoading: state.login.isLoading
+        authLoading: state.auth.isLoading
     }
 }
 
@@ -51,15 +55,21 @@ const mapDispatchToProps = {
 
 const Main = (props) => {
 
-
+    const mainData = props.mainData;
     const categoryData = props.categoryData;
     const itemsData = props.itemsData;
     const inCartItems = props.inCartItems;
+    const authStatus =  props.authStatus;
+    const mainLoading = props.mainLoading;
     const catIsLoading = props.catIsLoading;
-
-    const [ pickedItem, setPickedItem ] = useState("")
-    const [ loginStatus, setLoginStatus ] = useState("")
+    const itemsDataLoading = props.itemsDataLoading;
+    const inCartItemsLoading = props.inCartItemsLoading;
+    const authLoading = props.authLoading;
     
+
+    const [ pickedItem, setPickedItem ] = useState("");
+    const [ signinRoute, setSigninRoute ] = useState(false);
+    const [ modalOpen, setModalOpen ] = useState(false);
 
     useEffect(() => {
         props.fetchMainData();
@@ -67,8 +77,8 @@ const Main = (props) => {
     }, [])
     
 
-    const handleCatChange = (link) => 
-        props.fetchCategoryData(link);
+    const handleCatChange = (link) =>{ 
+        props.fetchCategoryData(link);}
     
     const handleHeaderCatChange = (link) => 
         props.fetchCategoryData(link);
@@ -80,6 +90,7 @@ const Main = (props) => {
         setPickedItem(item);
 
 
+    //For adding new items to cart
     const addCartHandler = ({pickedItem, size, qty}) => {
         if (inCartItems) {
             if(findCartItem(inCartItems, pickedItem, size)){
@@ -149,6 +160,16 @@ const Main = (props) => {
         )
     }
 
+    //toggle the signin modal
+    const handleModalOpen = () => {
+      setModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+      setModalOpen(false);
+    };
+
+
     //Total qty of items in cart
     const cartQty = props.inCartItems ?
         props.inCartItems.map(item => Number(item.quantity)).reduce((t, c) => t + c, 0) :
@@ -164,27 +185,51 @@ const Main = (props) => {
             <Router>
                 <div className="container">
                     <Header 
-                        loginStatus={loginStatus}
+                        authStatus={authStatus}
                         cartQty={cartQty}
                         handleHeaderCatChange={handleHeaderCatChange}
+                        authStatus={authStatus}
+                        signinRoute={signinRoute}
+                        setSigninRoute={setSigninRoute}
+                        handleModalOpen={handleModalOpen}
+                        handleModalClose={handleModalClose}
+                        modalOpen={modalOpen}
                     />
                     <div className="holder"> 
                         <Switch>                
                         <Route path="/" exact render={()=> 
                              <BodySection 
-                                mainData={props.mainData}
+                                mainData={mainData}
                                 handleCatChange={handleCatChange}
                              />
                         } />
                         <Route path="/help" exact component={Help}/>
+                        {
+                            authStatus.isAuthenticated ?
+                            authStatus.user.username === "admin" ? 
+                            <Route path="/admin" exact component={Admin}/> :
+                            <Route path="/admin" exact component={Contact}/> :
+                            <Route path="/admin" exact component={Contact}/>
+                        }
                         <Route path="/contact" exact component={Contact}/>
-                        <Route path="/signup" exact component={Signup}/>
-                        <Route path="/login" exact component={Login}/>
-                        <Route path="/orders" exact component={OrdersData}/>
+                        <Route path='/thankyou' exact component={ThankYou}/>
+                        <Route path="/signup" exact render={() =>
+                            <Signup 
+                                setSigninRoute={setSigninRoute}
+                            />
+                        } />
+                        <Route path="/checkout" exact render={() => 
+                            <Checkout 
+                                inCartItems={inCartItems}
+                                cartTotal={cartTotal}
+                            />
+                        } />
                         <Route path="/shopping-cart" exact render={() => 
                             <ShoppingCart 
-                                inCartItems={props.inCartItems}
+                                inCartItems={inCartItems}
                                 cartTotal={cartTotal}
+                                authStatus={authStatus}
+                                handleModalOpen={handleModalOpen}
                             />
                         } />
                         <Route path="/:menuId" exact component={RenderMenu} />
@@ -195,10 +240,11 @@ const Main = (props) => {
                     <Footer />
                 </div>
             </Router>
-            { props.mainLoading ||
-              props.catIsLoading ||
-              props.loginIsLoading ||
-              props.itemsDataLoading ? 
+            { mainLoading ||
+              catIsLoading ||
+              inCartItemsLoading ||
+              itemsDataLoading ||
+              authLoading ? 
               <Loading /> : 
               null 
             }
@@ -236,14 +282,6 @@ const addCartItem = (item, size, qty) => {
         date: new Date().toISOString()
     };
 }
-
-//filter object
-// const filteredObj = (objs, objName) => {
-//     let targetObj = [objName];
-//     return Object.keys(objs).filter(key => targetObj.includes(key)).reduce((obj, key) => {
-//     obj[key] = objs[key];
-//     return obj;
-//     }, {})};
 
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

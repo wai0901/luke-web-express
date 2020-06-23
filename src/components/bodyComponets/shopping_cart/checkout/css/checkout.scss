@@ -1,0 +1,138 @@
+$linkColor: #444;
+$hoverColor: #eb4559;
+$editInfoLink: rgb(223, 65, 65);
+
+@mixin margin-padding-zero {
+    margin: 0;
+    padding: 0;
+}
+
+
+.checkout-container {
+    width: 100%;
+    background-color: #eee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: 500ms ease-in-out;
+    .cards-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        position: relative;
+        margin: 40px auto;
+        min-height: 630px;
+        width: 100%;
+        .card-items {
+            @include margin-padding-zero;
+            width: 100%;
+            .borderLine-share {
+                border-bottom: 1px solid #999;
+            }
+            .fontBold-share {
+                font-weight: bold;
+                padding-bottom: 10px;
+            }
+            .largeFont-share {
+                font-size: 1.3rem;
+            }
+            .checkout-items-list {
+                min-height: 30px;
+                width: 80%;
+                position: relative;
+                margin: 5px auto 0;
+                text-align: end;
+                .checkout-item {
+                    position: relative;
+                    margin: 0 auto;
+                    display: grid;
+                    grid-template-columns: 2fr 1fr 1fr;
+                    p {
+                        margin: 3px 0;
+                        padding: 5px 0;
+                        font-size: 0.9rem;
+                    }
+                }
+            }
+        }
+        .card-info {
+            position: relative;
+            @include margin-padding-zero;
+            width: 100%;
+            .checkout-css-share {
+                min-height: 230px;
+                width: 80%;
+                @include margin-padding-zero;
+            }
+            .borderLine-share {
+                border-bottom: 1px solid #999;
+            }
+            .checkout-customer {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                position: relative;
+                margin: 5px auto 0;
+                .contact-info {
+                    height: 190px;
+                    margin: 5px 10px 10px 10px;
+                    background-color: #fff;
+                    border-radius: 10px;
+                    div {
+                        @include margin-padding-zero;
+                        position: relative;
+                        left: 20px;
+                    }
+                    p {
+                        @include margin-padding-zero;
+                        font-size: 0.9rem;
+                        margin: 8px 0;
+                    }
+                    h6 {
+                        font-size: 1.1rem;
+                        font-weight: bold;
+                        margin: 20px 0 10px;
+                    }
+                    .edit-info-share {
+                        margin-top: 10px;
+                        a {
+                            font-weight: bold;
+                            font-size: 0.8rem;
+                            color: $editInfoLink;
+                        }
+                    }
+                }
+            }
+            .checkout-card-info {
+                position: relative;
+                margin: 0 auto;
+                width: 320px;
+                text-align: center;
+            }
+        }
+    }
+}
+@media screen and (max-width: 980px) {
+    .checkout-container {
+        flex-direction: row;
+        .cards-container {
+            grid-template-columns: none;
+            grid-template-rows: 1fr 2fr;
+            
+        }
+    }
+};
+@media screen and (max-width: 660px) {
+    .checkout-container {
+        .cards-container {
+            .card-info {
+                .checkout-customer { 
+                    grid-template-columns: none;
+                    grid-template-rows: 1fr 1fr;
+            
+                }
+            }
+        }
+    }
+    
+};
+
+

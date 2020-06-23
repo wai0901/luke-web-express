@@ -1,0 +1,65 @@
+$backButtonHoverColor: #bebebe;
+$buyButtonColor: #eb4559;
+$buyButtonHoverColor: #00b31e;
+
+.cc-container{
+    margin: 20px auto 0;
+    width: 320px;
+    position: relative;
+    .cc-form-container {
+        margin: 20px 0;
+        .form-group {
+            margin: 10px 0;
+            .form-control {
+                padding: 8px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                font-size: 0.8rem;
+            }
+            .long-input {
+                width: 300px;
+            }
+            .short-input {
+                width: 70px;
+            }
+        }
+        .valid-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            text-align: start;
+            .valid {
+                margin-left: 2px;
+            }
+        }
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            button {
+                padding: 10px 40PX;
+                margin: 0 5px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.1s ease-in-out;
+            }
+            .buy-button {
+                background-color: $buyButtonColor;
+                border: 2px solid $buyButtonColor;
+                color: #eee;
+            }
+            .back-button {
+                border: 2px solid #777;
+                color: #777;
+            }
+            .buy-button:hover {
+                color: #fff;
+                background-color: $buyButtonHoverColor;
+                border: 2px solid $buyButtonHoverColor;
+            }
+            .back-button:hover {
+                color: #fff;
+                background-color: $backButtonHoverColor;
+                border: 2px solid $backButtonHoverColor;
+            }
+        }
+    }
+}

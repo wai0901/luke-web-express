@@ -1,0 +1,80 @@
+.cc-container {
+  margin: 20px auto 0;
+  width: 320px;
+  position: relative;
+}
+
+.cc-container .cc-form-container {
+  margin: 20px 0;
+}
+
+.cc-container .cc-form-container .form-group {
+  margin: 10px 0;
+}
+
+.cc-container .cc-form-container .form-group .form-control {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 0.8rem;
+}
+
+.cc-container .cc-form-container .form-group .long-input {
+  width: 300px;
+}
+
+.cc-container .cc-form-container .form-group .short-input {
+  width: 70px;
+}
+
+.cc-container .cc-form-container .valid-group {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+  text-align: start;
+}
+
+.cc-container .cc-form-container .valid-group .valid {
+  margin-left: 2px;
+}
+
+.cc-container .cc-form-container .button-group {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+}
+
+.cc-container .cc-form-container .button-group button {
+  padding: 10px 40PX;
+  margin: 0 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+}
+
+.cc-container .cc-form-container .button-group .buy-button {
+  background-color: #eb4559;
+  border: 2px solid #eb4559;
+  color: #eee;
+}
+
+.cc-container .cc-form-container .button-group .back-button {
+  border: 2px solid #777;
+  color: #777;
+}
+
+.cc-container .cc-form-container .button-group .buy-button:hover {
+  color: #fff;
+  background-color: #00b31e;
+  border: 2px solid #00b31e;
+}
+
+.cc-container .cc-form-container .button-group .back-button:hover {
+  color: #fff;
+  background-color: #bebebe;
+  border: 2px solid #bebebe;
+}
+/*# sourceMappingURL=creditCard.css.map */

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckOutItem from './CheckOutItem';
@@ -18,9 +18,10 @@ const mapDispatchToProps = {
 //Material Ui Style
 const useStyles = makeStyles((theme) => ({
     buttonStyle: {
-      minWidth: '100px',
-      maxWidth: '100px',
+      width: '150px',
       margin: theme.spacing(0.5),
+      fontSize: '15px',
+      fontWeight: 'bold'
     },
   }));
 
@@ -29,30 +30,9 @@ const ShoppingCart = ({inCartItems,
                         updateCartItems, 
                         removeCartItems, 
                         fetchCartData,
-                        checkoutOrder
+                        authStatus,
+                        handleModalOpen
                     }) => {
-
-    //Temp
-    const handleOrderSubmit = () => {
-        let orders = inCartItems.map(item => {
-            return {
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                productId: item.productId,
-                quantity: item.quantity,
-                _id: item._id
-            }
-        })
-        let finalOrder = {
-            orders: orders,
-            orderTotal: cartTotal
-        }
-        checkoutOrder(finalOrder);
-    }
-
-
-
 
     useEffect(() => {
         fetchCartData();
@@ -98,13 +78,17 @@ const ShoppingCart = ({inCartItems,
             <div className="top-section">
                 <div className="top-container">
                     <div className="button">
-                        <Button onClick={() => history.goBack()} variant="outlined" size="small" className={classes.buttonStyle}>Back</Button>
+                        <Button onClick={() => history.goBack()} variant="outlined" size="middle" className={classes.buttonStyle}>Back</Button>
                     </div>
                     <div className="button total">
                         <h1><span>$</span> {inCartItems ? cartTotal : "0.00"} <span>USD</span></h1>
                     </div>
                     <div className="button">
-                        <Button variant="outlined" onClick={() => handleOrderSubmit()} size="small" className={classes.buttonStyle}>Check Out</Button>
+                        {
+                            !authStatus.isAuthenticated ?
+                            <Link className="checkout-button"><Button onClick={() => handleModalOpen()} variant="outlined" size="middle" className={classes.buttonStyle}>Check Out</Button></Link> :
+                            <Link to={"/checkout"} className="checkout-button"><Button variant="outlined" size="middle" className={classes.buttonStyle}>Check Out</Button></Link>
+                        }
                     </div>
                 </div>
             </div>

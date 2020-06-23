@@ -1,0 +1,66 @@
+.contact-container {
+  width: 100%;
+  background-color: #eee;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-transition: 500ms ease-in-out;
+  transition: 500ms ease-in-out;
+}
+
+.contact-container .cards-container {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 3fr 1fr;
+      grid-template-columns: 3fr 1fr;
+  position: relative;
+  margin: 70px auto;
+  width: 80%;
+  -webkit-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+
+.contact-container .cards-container .card {
+  width: 100%;
+  margin: 0;
+  position: relative;
+  margin: auto;
+  border-radius: 10px;
+}
+
+.contact-container .cards-container .card ul {
+  padding: 0;
+  margin: 0;
+}
+
+.contact-container .cards-container .card .purchasedOrder {
+  list-style: none;
+  margin: 0 40px;
+  padding: 0;
+  border-bottom: 1px solid #999;
+}
+
+.contact-container .cards-container .card .purchasedOrder .main-order-info {
+  margin: 10px 20px;
+}
+
+.contact-container .cards-container .card .purchasedOrder .indiviual-item {
+  margin: 15px 0 15px 50px;
+}
+
+.contact-container .cards-container .card .purchasedOrder .indiviual-item p {
+  font-size: 0.9rem;
+  margin: 6px 0;
+}
+
+.contact-container .cards-container .button-card {
+  min-height: 500px;
+}
+/*# sourceMappingURL=admin.css.map */

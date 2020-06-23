@@ -5,6 +5,27 @@
   background-color: #eee;
 }
 
+.contact-container .message-container {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  top: 70px;
+}
+
+.contact-container .message-container .message {
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.contact-container .message-container .warning {
+  color: #eb4559;
+}
+
+.contact-container .message-container .success {
+  color: #299114;
+}
+
 .contact-container .card {
   position: relative;
   margin: 0 auto;

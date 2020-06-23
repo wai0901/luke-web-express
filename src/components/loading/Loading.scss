@@ -15,6 +15,8 @@ $pulse-duration: 750ms;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 0;
+    margin: 0;
     @keyframes spin {
         0% {
           transform: rotate(0deg);

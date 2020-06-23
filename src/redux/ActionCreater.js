@@ -4,6 +4,34 @@ import { baseUrl } from '../shared/baseUrl';
 
 
 //Fetch Data from server
+// export const fetchMainData = () => dispatch => {
+//     dispatch(mainDataLoading());
+
+//     const bearer = 'Bearer ' + localStorage.getItem('token');
+
+//     return fetch(baseUrl + 'main', {
+//         headers: {
+//             'Authorization': bearer
+//         },
+//     })
+//     .then(response => {
+//             if (response.ok) {
+//                 return response;
+//             } else {
+//                 const error = new Error(`Error ${response.status}: ${response.statusText}`);
+//                 error.response = response;
+//                 throw error;
+//             }
+//         },
+//         error => { throw error; }
+//     )
+//     .then(response => response.json())
+//     .then(response => dispatch(addMainData(response)))
+//     .catch(error => dispatch(mainFailed(error.message)));
+// }
+
+
+// Fetch Data from server
 export const fetchMainData = () => async dispatch => {
     dispatch(mainDataLoading());
 
@@ -155,7 +183,7 @@ export const checkoutOrder = (order) => dispatch => {
     dispatch(fetchOrdersDataLoading());
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
-    console.log(order)
+    
     return fetch(baseUrl + 'orders', {
         method: 'POST',
         body: JSON.stringify(order),
@@ -207,7 +235,6 @@ export const ordersData = () => dispatch => {
         },
     })
     .then(response => {
-            console.log(response)
             if (response.ok) {
                 return response;
             } else {
@@ -220,7 +247,7 @@ export const ordersData = () => dispatch => {
     )
     .then(response => response.json())
     .then(orders => dispatch(fetchOrdersData(orders)))
-    .catch(error => dispatch(fetchOrdersDataLoading(error.message)));
+    .catch(error => dispatch(fetchOrdersDataFailed(error.message)));
 }
 
 export const fetchOrdersDataFailed = errMess => ({
@@ -238,32 +265,6 @@ export const fetchOrdersDataLoading = () => ({
 });
 
 
-//User Route
-// export const userLogin = (data) => async dispatch => {
-//     dispatch(userLoginLoading());
-
-//     await axios.post(baseUrl + 'users/login', data)
-//     .then(response => {
-//         dispatch(userLoginData(response));
-//         })
-//     .catch(error => userLoginFailed(error));
-
-// };
-
-// export const userLoginFailed = errMess => ({
-//     type: ActionTypes.USER_LOGIN_FAILED,
-//     payload: errMess
-// });
-
-// export const userLoginData = (response) => ({
-//     type: ActionTypes.USER_LOGIN_DATA,
-//     payload: response
-// });
-
-// export const userLoginLoading = () => ({
-//     type: ActionTypes.USER_LGOIN_LOADING,
-// });
-
 
 //Login Route
 
@@ -279,10 +280,10 @@ export const userLogin = creds => dispatch => {
         body: JSON.stringify(creds)
     })
     .then(response => {
-        console.log(response)
             if (response.ok) {
                 return response;
             } else {
+                console.log(response)
                 const error = new Error(`Error ${response.status}: ${response.statusText}`);
                 error.response = response;
                 throw error;
@@ -296,9 +297,10 @@ export const userLogin = creds => dispatch => {
             // If login was successful, set the token in local storage
             localStorage.setItem('token', response.token);
             localStorage.setItem('creds', JSON.stringify(creds));
+            console.log(response)
             // Dispatch the success action
-            // dispatch(fetchFavorites());
             dispatch(receiveLogin(response));
+            alert('You are successfully signed in');
         } else {
             const error = new Error('Error ' + response.status);
             error.response = response;
@@ -346,6 +348,99 @@ export const logoutUser = () => (dispatch) => {
     dispatch(requestLogout())
     localStorage.removeItem('token');
     localStorage.removeItem('creds');
+    alert('Your are logged out, come again!!');
     // dispatch(favoritesFailed("Error 401: Unauthorized"));
     dispatch(receiveLogout())
 }
+
+//Sign up route
+export const signupUser = (info) => (dispatch) => {
+    dispatch(signupLoading())
+
+    return fetch(baseUrl + 'users/signup', {
+        method: "POST",
+        body: JSON.stringify(info),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => { throw error; }             
+    )
+    .then(response => response.json())
+    .then(response => {
+        dispatch(signupSuccess(response));
+        alert('You are successfully signed up, thank you!');
+    })
+    .catch(error => {
+        dispatch(signupFailed(error))
+        alert('Your sign up could not be process\nError: '+error.message);
+    });
+};
+
+export const signupFailed = errMess => ({
+    type: ActionTypes.SIGNUP_FAILURE,
+    payload: errMess
+});
+
+export const signupSuccess = (response) => ({
+    type: ActionTypes.SIGNUP_SUCCESS,
+    payload: response
+});
+
+export const signupLoading = () => ({
+    type: ActionTypes.SIGNUP_LOADING,
+});
+
+
+//Fetch User information
+export const fetchUsersData = () => dispatch => {
+    dispatch(fetchUsersDataLoading());
+
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + 'users', {
+        headers: {
+            'Authorization': bearer
+        },
+    })
+    .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => { throw error; }
+    )
+    .then(response => response.json())
+    .then(users => dispatch(fetchData(users)))
+    .catch(error => dispatch(fetchUsersDataFailed(error.message)));
+}
+
+export const fetchUsersDataFailed = errMess => ({
+    type: ActionTypes.FETCH_USERS_DATA_FAILED,
+    payload: errMess
+});
+
+export const fetchData = (response) => ({
+    type: ActionTypes.FETCH_USERS_DATA,
+    payload: response
+});
+
+export const fetchUsersDataLoading = () => ({
+    type: ActionTypes.FETCH_USERS_DATA_LOADING,
+});
+
+

@@ -11,10 +11,9 @@ const featureSales = {
 
 const BodySection = ({ mainData, handleCatChange }) => {
 
-    
     return (
         <div className="body-container">
-            <div className="page" className="sales" style={featureSales}>
+            <div className="page sales" style={featureSales}>
                 <div className="sales-container">
                     <div className="sales-info">
                         <h1>"30% off"</h1>

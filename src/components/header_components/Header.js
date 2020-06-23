@@ -36,7 +36,6 @@ const Header = (props) => {
     const indexDown = {
         zIndex: "8"
     }
-    
     return(
         <div className="header-container"  style={menu? indexUp: indexDown}>
             <section>
@@ -52,7 +51,16 @@ const Header = (props) => {
                         />
                     </div>
                     <div className="shop">
-                        <ShopModule cartQty={props.cartQty}/>
+                        <ShopModule 
+                            cartQty={props.cartQty}
+                            authStatus={props.authStatus}
+                            authStatus={props.authStatus}
+                            signinRoute={props.signinRoute}
+                            setSigninRoute={props.setSigninRoute}
+                            handleModalOpen={props.handleModalOpen}
+                            handleModalClose={props.handleModalClose}
+                            modalOpen={props.modalOpen}
+                        />
                     </div> 
                 </div>
                 <div className="m-button-container">

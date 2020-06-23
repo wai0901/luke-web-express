@@ -15,7 +15,7 @@
   transition: 500ms ease-in-out;
 }
 
-.contact-container .cards-container {
+.contact-container .contact-cards-container {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: 1fr 1fr;
@@ -25,30 +25,30 @@
   width: 60%;
 }
 
-.contact-container .cards-container .card {
+.contact-container .contact-cards-container .card {
   margin: 0;
 }
 
-.contact-container .cards-container .card h3 {
+.contact-container .contact-cards-container .card h3 {
   text-transform: uppercase;
 }
 
-.contact-container .cards-container .card p, .contact-container .cards-container .card a {
+.contact-container .contact-cards-container .card p, .contact-container .contact-cards-container .card a {
   margin: 20px 0;
   line-height: 1.5rem;
   text-decoration: none;
   color: #000;
 }
 
-.contact-container .cards-container .card .form-container {
+.contact-container .contact-cards-container .card .form-container {
   width: 100%;
 }
 
-.contact-container .cards-container .card .form-container .form-group {
+.contact-container .contact-cards-container .card .form-container .form-group {
   margin: 15px 0;
 }
 
-.contact-container .cards-container .card .form-container .form-group .label, .contact-container .cards-container .card .form-container .form-group .form-control {
+.contact-container .contact-cards-container .card .form-container .form-group .label, .contact-container .contact-cards-container .card .form-container .form-group .form-control {
   width: 100%;
   display: block;
   margin: 0 0 2px 0;
@@ -58,46 +58,46 @@
   border: none;
 }
 
-.contact-container .cards-container .card .form-container .form-group .label {
+.contact-container .contact-cards-container .card .form-container .form-group .label {
   font-size: 0.9rem;
 }
 
-.contact-container .cards-container .card .form-container .form-group .form-control {
+.contact-container .contact-cards-container .card .form-container .form-group .form-control {
   margin-top: 5px;
   padding: 10px 0 10px 5px;
 }
 
-.contact-container .cards-container .card .form-container .form-group .check {
+.contact-container .contact-cards-container .card .form-container .form-group .check {
   margin: 0 0 20px;
   color: #444;
 }
 
-.contact-container .cards-container .card .form-container .form-group .text-warning {
+.contact-container .contact-cards-container .card .form-container .form-group .text-warning {
   margin-top: 5px;
   color: #eb4559;
   font-size: 0.8rem;
   line-height: 1rem;
 }
 
-.contact-container .cards-container .card .form-container .form-group .check-label {
+.contact-container .contact-cards-container .card .form-container .form-group .check-label {
   margin-top: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.contact-container .cards-container .card .form-container .form-group .check-label p {
+.contact-container .contact-cards-container .card .form-container .form-group .check-label p {
   position: relative;
   top: -2px;
   margin: 0 0 2px 3px;
   font-size: 0.9rem;
 }
 
-.contact-container .cards-container .card .form-container .button-group {
+.contact-container .contact-cards-container .card .form-container .button-group {
   margin-top: 20px;
 }
 
-.contact-container .cards-container .card .form-container .button-group button {
+.contact-container .contact-cards-container .card .form-container .button-group button {
   padding: 10px 30PX;
   border-radius: 5px;
   border: 2px solid #777;
@@ -107,114 +107,36 @@
   transition: 0.1s ease-in-out;
 }
 
-.contact-container .cards-container .card .form-container .button-group button:hover {
+.contact-container .contact-cards-container .card .form-container .button-group button:hover {
   color: #fff;
   background-color: #eb4559;
   border: 2px solid #eb4559;
 }
 
-.contact-container .loading-container {
-  position: fixed;
-  height: 100vh;
-  width: 100vw;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.contact-container .loading-container div {
-  height: 300px;
-  width: 400px;
-  background-color: white;
-  -webkit-box-shadow: 4px 7px 8px 1px rgba(0, 0, 0, 0.18);
-          box-shadow: 4px 7px 8px 1px rgba(0, 0, 0, 0.18);
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  margin: 0 auto;
-  -ms-flex-item-align: center;
-      align-self: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.contact-container .loading-container div .text {
-  color: #444;
-  display: inline-block;
-  margin-left: 5px;
-}
-
-.contact-container .loading-container div .bounceball {
-  position: relative;
-  display: inline-block;
-  height: 37px;
-  width: 15px;
-  background-color: rgba(0, 0, 0, 0);
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-
-.contact-container .loading-container div .bounceball:before {
-  position: absolute;
-  content: '';
-  display: block;
-  top: 0;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background-color: #eb4559;
-  -webkit-transform-origin: 50%;
-          transform-origin: 50%;
-  -webkit-animation: bounce 500ms alternate infinite ease;
-          animation: bounce 500ms alternate infinite ease;
-}
-
-@-webkit-keyframes bounce {
-  0% {
-    top: 30px;
-    height: 5px;
-    border-radius: 60px 60px 20px 20px;
-    -webkit-transform: scaleX(2);
-            transform: scaleX(2);
+@media screen and (max-width: 1200px) {
+  .contact-container {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
   }
-  35% {
-    height: 15px;
-    border-radius: 50%;
-    -webkit-transform: scaleX(1);
-            transform: scaleX(1);
-  }
-  100% {
-    top: 0;
+  .contact-container .contact-cards-container {
+    -ms-grid-columns: none;
+        grid-template-columns: none;
+    -ms-grid-rows: 1fr 2fr;
+        grid-template-rows: 1fr 2fr;
   }
 }
 
-@keyframes bounce {
-  0% {
-    top: 30px;
-    height: 5px;
-    border-radius: 60px 60px 20px 20px;
-    -webkit-transform: scaleX(2);
-            transform: scaleX(2);
+@media screen and (max-width: 700px) {
+  .contact-container .contact-cards-container {
+    width: 80%;
   }
-  35% {
-    height: 15px;
-    border-radius: 50%;
-    -webkit-transform: scaleX(1);
-            transform: scaleX(1);
-  }
-  100% {
-    top: 0;
+}
+
+@media screen and (max-width: 700px) {
+  .contact-container .contact-cards-container {
+    width: 100%;
   }
 }
 /*# sourceMappingURL=contact.css.map */

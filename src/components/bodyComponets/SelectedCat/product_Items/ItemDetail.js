@@ -5,6 +5,7 @@ import { KeyboardArrowLeft, KeyboardArrowRight} from '@material-ui/icons';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import EmptyFieldMessage from './empty_field_message/EmptyFieldMessage';
+import { v4 as uuidv4 } from 'uuid';
 import ItemForm from './item_form/ItemForm';
 import "./css/ItemDetail.css";
 
@@ -90,7 +91,7 @@ const ItemDetail =(props) => {
     };
   
   return (
-    <div class="item-detail-container">
+    <div className="item-detail-container">
         <div className={classes.root}>
           <AutoPlaySwipeableViews
             axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -101,7 +102,7 @@ const ItemDetail =(props) => {
           >
           { pickedItem ?
             pickedItem.images.map((step, index) => (
-            <div key={step.label}>
+            <div key={uuidv4()}>
               {Math.abs(activeStep - index) <= 2 ? (
                 <img className={classes.img} style={{background: `url('${step}') no-repeat center 50% / cover`}} alt=""/>
               ) : null}

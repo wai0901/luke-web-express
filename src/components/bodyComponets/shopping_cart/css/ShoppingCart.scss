@@ -27,6 +27,10 @@ $bgColor: #CFCFCF;
                 h1 > span {
                     font-size: 1.2rem;
                 }
+                .checkout-button {
+                    list-style: none;
+                    text-decoration: none;
+                }
             }
             .total {
                 top: -2px;

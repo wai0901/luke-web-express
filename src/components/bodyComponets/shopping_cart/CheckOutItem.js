@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles, Button, ButtonGroup, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { v4 as uuidv4 } from 'uuid';
 import './css/CheckOutItem.css';
 
 
@@ -22,7 +23,7 @@ const CheckOutItem = ({item, changeQtyHandler}) => {
         background: `url('${item.images[0]}') no-repeat center ${item.position} / cover`
     }  
 
-    return <li className="item-container">
+    return <li className="item-container" key={uuidv4()}>
             <div key={item.id} className="item-image" style={itemImage}></div>
             <div className="item-info">
                 <div className="info-group">

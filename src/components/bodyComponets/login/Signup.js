@@ -1,6 +1,8 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom'
+import { connect } from 'react-redux';
 import {Control, LocalForm, Errors } from 'react-redux-form';
+import { signupUser } from '../../../redux/ActionCreater';
 import './css/signup.css';
 
 const required = val => val && val.length;
@@ -9,14 +11,18 @@ const minLength = len => val => val && (val.length >= len);
 const isNumber = val => !isNaN(+val);
 const validEmail = val => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
+const mapDispatchToProps = {
+    signupUser: (info) => (signupUser(info)),
+};
 
-const Contact = () => {
+
+const Signup = ({setSigninRoute, signupUser}) => {
 
     const history = useHistory();
 
     const handleSubmit = (values) => {
-        console.log(values)
         alert(`Thank you ${values.firstname} ${values.lastname} for register`)
+        signupUser(values)
         history.goBack()
     }
 
@@ -259,24 +265,15 @@ const Contact = () => {
                         </div>
 
                         <div className="form-group button-group">
-                            <button type="submit" color="primary">
+                            <button type="submit" onClick={setSigninRoute(true)} color="primary">
                                 SEND
                             </button>
                         </div>
                     </LocalForm>
                 </div>    
             </div>
-
-            {/* <div className="loading-container">
-                {props.contactLoading && 
-                  <div>
-                    <div class="bounceball"></div>
-                    <p className="text">LOADING...(Stimulating fatch data Demo)</p>
-                  </div>
-                }
-            </div>  */}
         </div>
     )
 }
 
-export default Contact;
+export default (connect(null, mapDispatchToProps)(Signup));

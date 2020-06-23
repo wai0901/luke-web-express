@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
+import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
-import { ShoppingCartOutlined, LockOpen, Search } from '@material-ui/icons';
-import { Badge, IconButton, Modal, Backdrop, Fade } from '@material-ui/core';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { ShoppingCartOutlined, ExitToApp, Person } from '@material-ui/icons';
+import { Badge, IconButton, Tooltip } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { logoutUser } from '../../../redux/ActionCreater';
+import SignInModal from './login-modal/SignInModal';
 import './css/ShopModule.css';
 
+const mapDispatchToProps = {
+    logoutUser
+}
 
 const StyledBadge = withStyles((theme) => ({
     badge: {
@@ -15,118 +21,63 @@ const StyledBadge = withStyles((theme) => ({
     },
   }))(Badge);
 
-  const useStyles = makeStyles((theme) => ({
-    modal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    paper: {
-      backgroundColor: theme.palette.background.paper,
-      border: '0',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-    },
-  }));
-
-const ShopModule = ({cartQty}) => {
-    //Login
-    const [user, setUser] = useState({
-      userName: "",
-      password: "",
-    });
 
 
-    //Modal
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+const ShopModule = ({cartQty, 
+                authStatus, 
+                logoutUser, 
+                signinRoute, 
+                setSigninRoute,
+                handleModalOpen,
+                handleModalClose,
+                modalOpen
+              }) => {
 
-    const handleOpen = () => {
-      setOpen(true);
-    };
-
-    const handleClose = () => {
-      setOpen(false);
-    };
-
-    //Login
-    function handleChange(event) {
-        const { name, value } = event.target;
-    
-        setUser(prevValue => {
-          return {
-            ...prevValue,
-            [name]: value
-          };
-        });
-      }
 
     return(
         <React.Fragment>
             <ul className="shop-container">
-                {/* <li>
-                    <IconButton aria-label="search">
-                        <Search style={{ fontSize: 22 }}>Filled</Search>
-                    </IconButton>
-                </li> */}
                 <li>
-                    <Link to={"/login"}>
-                        <IconButton aria-label="logIn">
-                            <LockOpen style={{ fontSize: 22 }}>Filled</LockOpen>
-                        </IconButton>
-                    </Link>
+                  {
+                      !authStatus.isAuthenticated ?
+
+                      <Tooltip title="Sign in" onClick={() => handleModalOpen()}>
+                          <IconButton aria-label="logIn">
+                              <Person style={{ fontSize: 25 }}>Filled</Person>
+                          </IconButton>
+                      </Tooltip> :
+
+                      <Tooltip title="Sign out" onClick={() => logoutUser()}>
+                          <IconButton aria-label="logIn">
+                              <ExitToApp style={{ fontSize: 25 }}>Filled</ExitToApp>
+                          </IconButton> 
+                      </Tooltip>            
+                    }
                 </li>
                 <li>
                     <Link to={"/shopping-cart"}>
-                        <IconButton aria-label="cart">
-                          <StyledBadge badgeContent={cartQty} color="secondary">
-                            <ShoppingCartOutlined />
-                          </StyledBadge>
-                        </IconButton>
+                        <Tooltip title="Shopping Cart">
+                            <IconButton aria-label="cart">
+                              <StyledBadge badgeContent={cartQty} color="secondary">
+                                <ShoppingCartOutlined />
+                              </StyledBadge>
+                            </IconButton>
+                        </Tooltip>
                     </Link>
                 </li>
             </ul>
-            
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                className={classes.modal}
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                  timeout: 500,
-                }}
-                >
-                <Fade in={open}>
-                <div className="modal-container">
-                    <div className="container">
-                        <h1>Welcome Back</h1>
-                        <form>
-                            <input
-                                onChange={handleChange}
-                                name="userName"
-                                value={user.userName}
-                                placeholder="User Name"
-                            />
-                            <input
-                                onChange={handleChange}
-                                name="password"
-                                value={user.password}
-                                placeholder="Password"
-                            />
-                            <button>Sign-in</button>
-                        </form>
-                        <div className="signup-container">
-                          <Link className="signup" to={'signup'} onClick={handleClose}>Signup for new account</Link>
-                        </div>
-                    </div>
-                </div>
-                </Fade>
-            </Modal>
+            <div className="modal">
+              <SignInModal 
+                handleModalClose={handleModalClose}
+                authStatus={authStatus}
+                open={modalOpen}
+                signinRoute={signinRoute}
+                setSigninRoute={setSigninRoute}
+                handleModalClose={handleModalClose}
+              />
+            </div>
         </React.Fragment>
     )
 }
 
-export default ShopModule;
+export default connect(null, mapDispatchToProps)(ShopModule);

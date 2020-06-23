@@ -36,6 +36,11 @@
   font-size: 1.2rem;
 }
 
+.cart-container .top-section .top-container .button .checkout-button {
+  list-style: none;
+  text-decoration: none;
+}
+
 .cart-container .top-section .top-container .total {
   top: -2px;
 }

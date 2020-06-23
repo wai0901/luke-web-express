@@ -4,7 +4,9 @@ import { mainPageReducer } from './mainPageReducer';
 import { categoryReducer } from './categoryReducer';
 import { itemsReducer } from './itemsReducer';
 import { cartReducer } from './cartReducer';
-import { loginReducer } from './loginReducer';
+import { signupReducer } from './signupReducer';
+import { ordersReducer } from './ordersReducer';
+import { usersReducer } from './usersReducer';
 import { Auth } from './auth';
 
 
@@ -15,7 +17,9 @@ export const configureStore = () => {
             category: categoryReducer,
             items: itemsReducer,
             cartItem: cartReducer,
-            login: loginReducer,
+            signup: signupReducer,
+            orders: ordersReducer,
+            users: usersReducer,
             auth: Auth,
         }),
         applyMiddleware(thunk)

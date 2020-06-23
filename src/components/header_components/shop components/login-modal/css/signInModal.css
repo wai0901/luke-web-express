@@ -1,0 +1,146 @@
+.modal-container {
+  width: 300px;
+  padding: 20px 40px;
+  text-align: center;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+}
+
+.modal-container .login-card {
+  text-align: center;
+  padding: 20px 0;
+  width: 100%;
+}
+
+.modal-container .login-card h3 {
+  text-transform: uppercase;
+}
+
+.modal-container .login-card p, .modal-container .login-card a {
+  margin: 20px 0;
+  line-height: 1.5rem;
+  text-decoration: none;
+  color: #000;
+}
+
+.modal-container .login-card .form-container {
+  width: 100%;
+}
+
+.modal-container .login-card .form-container .form-group {
+  margin: 15px 0;
+}
+
+.modal-container .login-card .form-container .form-group .label, .modal-container .login-card .form-container .form-group .form-control {
+  width: 100%;
+  display: block;
+  margin: 0 0 2px 0;
+  border-radius: 5px;
+  outline: none;
+  border-style: solid;
+  border: none;
+}
+
+.modal-container .login-card .form-container .form-group .label {
+  font-size: 0.9rem;
+}
+
+.modal-container .login-card .form-container .form-group .form-control {
+  margin-top: 5px;
+  padding: 10px 0 10px 10px;
+}
+
+.modal-container .login-card .form-container .form-group .check {
+  margin: 0 0 20px;
+  color: #444;
+}
+
+.modal-container .login-card .form-container .form-group .text-warning {
+  margin-top: 5px;
+  color: #eb4559;
+  font-size: 0.8rem;
+  line-height: 1rem;
+}
+
+.modal-container .login-card .form-container .form-group .check-label {
+  margin-top: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.modal-container .login-card .form-container .form-group .check-label p {
+  position: relative;
+  top: -2px;
+  margin: 0 0 2px 3px;
+  font-size: 0.9rem;
+}
+
+.modal-container .login-card .form-container .state-and-zip-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  padding: 0;
+  margin: 0;
+}
+
+.modal-container .login-card .form-container .state-and-zip-container .state-and-zip-label {
+  margin: 0;
+  padding: 0;
+  width: 0;
+}
+
+.modal-container .login-card .form-container .state-and-zip-container .state-and-zip {
+  width: 50%;
+}
+
+.modal-container .login-card .form-container .state-and-zip-container .state-and-zip-left {
+  margin-right: 10%;
+}
+
+.modal-container .login-card .form-container .button-group {
+  margin-top: 20px;
+}
+
+.modal-container .login-card .form-container .button-group button {
+  padding: 10px 30PX;
+  border-radius: 5px;
+  border: 2px solid #777;
+  color: #777;
+  cursor: pointer;
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+}
+
+.modal-container .login-card .form-container .button-group button:hover {
+  color: #fff;
+  background-color: #eb4559;
+  border: 2px solid #eb4559;
+}
+
+.modal-container .login-card .form-container .button-group .back-button {
+  margin-left: 40px;
+}
+
+.modal-container .login-card .form-container .signup-container {
+  margin: 20px 0;
+}
+
+.modal-container .login-card .form-container .signup-container .signup {
+  color: #444;
+  list-style: none;
+  font-size: 0.9rem;
+}
+
+.modal-container .login-card .form-container .signup-container .signup:hover {
+  color: #b4b4b4;
+}
+
+.modal-container:focus {
+  outline: 0 !important;
+}
+/*# sourceMappingURL=signInModal.css.map */

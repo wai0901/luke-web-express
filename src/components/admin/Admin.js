@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -32,14 +32,21 @@ const useStyles = makeStyles((theme) => ({
 
 const Contact = ({orderHistory, ordersData, fetchUsersData, usersData}) => {
 
+    const [ orderHistoryShow, setOrderHistoryShow ] = useState(false);
+    const [ userDataShow, setuserDataShow ] = useState(false);
+
     const classes = useStyles();
 
     const handleOrdersHistorySubmit = () => {
-        ordersData()
+        ordersData();
+        setOrderHistoryShow(true);
+        setuserDataShow(false);
     }
 
     const handleUsersSubmit = () => {
         fetchUsersData()
+        setOrderHistoryShow(false);
+        setuserDataShow(true);
     }
 
     return (
@@ -47,10 +54,12 @@ const Contact = ({orderHistory, ordersData, fetchUsersData, usersData}) => {
             <div className="cards-container">
                 <div>
                     {
+                        orderHistoryShow ?
                         orderHistory ?
                         <div className="card">
                             <ul>
                                 {
+                                    orderHistory &&
                                     orderHistory.map(order => 
                                         <li className="purchasedOrder">
                                             <p className="main-order-info">Purchased date: {order.createdAt}</p>
@@ -71,13 +80,16 @@ const Contact = ({orderHistory, ordersData, fetchUsersData, usersData}) => {
                                 }
                             </ul>
                         </div> :
+                        <div></div> :
                         <div></div>
                     }
                     {
+                        userDataShow?
                         usersData ?
                         <div className="card">
                             <ul>
                                 {
+                                    usersData &&
                                     usersData.map(user => 
                                         <li className="purchasedOrder">
                                             <p className="main-order-info">User ID: {user._id}</p>
@@ -94,6 +106,7 @@ const Contact = ({orderHistory, ordersData, fetchUsersData, usersData}) => {
                                 }
                             </ul>
                         </div> :
+                        <div></div>:
                         <div></div>
                     }
                 </div>

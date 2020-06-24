@@ -122,6 +122,17 @@ $height: 15px;
                 }
                 
             }
+            .message-container {
+                .message {
+                    font-weight: bold;
+                }
+                .warning {
+                    color: $warningMessage;
+                }
+                .success {
+                    color: $successMessage;
+                }
+            }
         }
     }
 }

@@ -300,7 +300,7 @@ export const userLogin = creds => dispatch => {
             console.log(response)
             // Dispatch the success action
             dispatch(receiveLogin(response));
-            alert('You are successfully signed in');
+            // alert('You are successfully signed in');
         } else {
             const error = new Error('Error ' + response.status);
             error.response = response;

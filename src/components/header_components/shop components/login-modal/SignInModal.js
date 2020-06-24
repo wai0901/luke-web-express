@@ -38,58 +38,41 @@ const SignInModal = ({authStatus,
                         handleModalClose,
                     }) => {
  
+    const [auth] = useState(authStatus.isAuthenticated);
+
     //Modal
     const classes = useStyles();
 
-    const [ username, setUsername ] = useState('');
-    const [ password, setPassword ] = useState('');
-    const [ warningMessage, setWarningMessage ] = useState(false);
-    const [ loginMessage, setLoginMessage ] = useState(false);
-
     const history = useHistory();
 
-    const handleUsernameChange = event => setUsername(event.target.value);
-    const handlePasswordChange = event => setPassword(event.target.value);
+    const handleLogin = (values) => {
 
-
-    const handleLogin = () => {
-
-        if ( username && password ) {
-            
-            userLogin({ username: username, password: password });
-            setPassword('')
-            const waitForResponse = () => {
-                if (authStatus.isLoading) {
-                    setTimeout(() => waitForResponse, 100)
-                } 
-            }
-    
-            authStatus.isLoading ? waitForResponse() : setTimeout(() => checkStatus(), 500);
-
-        }
-    }
-
-    const checkStatus = () => {
-
-        setTimeout(() => {
-            if (authStatus.isAuthenticated) {    
-                if (signinRoute) {
-                    if (authStatus.user.username !== "admin") {
-                         history.push('/');
-                         return handleModalClose();
+        if (values) {
+            userLogin(values);
+            // getStatus();
+            // checkStatus();
+            setTimeout(() => {
+                if (auth) {
+                    console.log(authStatus)
+                    if (authStatus.user !== null) {
+                        authStatus.user.username !== "admin" && handleModalClose();
+                    } else if ( authStatus.errMess === "Error 401: Unauthorized" || 
+                                authStatus.errMess === null ||
+                                authStatus.errMess === "" ||
+                                !auth
+                    ) {
+                        return null;
+                    } else {
+                        handleModalClose();
                     }
-                    setPassword('');
-                    return setSigninRoute(false);
-                } else {
-                    if (authStatus.user.username !== "admin") {
-                        history.goBack();
-                        return handleModalClose();
-                    }
-                    return setPassword('');
                 }
-            } 
-        }, 1000);
-    }
+            }, 3500)
+            // setTimeout(() => {
+            //     signinRoute ? history.push('/') : history.goBack();
+            // }, 3500)
+        } 
+    } 
+    
 
 
     return(
@@ -113,13 +96,13 @@ const SignInModal = ({authStatus,
                             <h3>Welcome Back</h3>
                         </div>
                         <div model="contactForm" className="form-container">
-                          <LocalForm>
+                          <LocalForm onSubmit={values => handleLogin(values)}>
                               <div className="form-group">
                                   <label htmlFor="username" className="label"></label>
                                   <Control.text model=".username" id="username" name="username"
                                       placeholder="Username"
                                       className="form-control"
-                                      onChange={handleUsernameChange}
+                                    //   onChange={handleUsernameChange}
                                       validators={{
                                           required,
                                           minLength: minLength(3),
@@ -143,7 +126,7 @@ const SignInModal = ({authStatus,
                                   <Control.text model=".password" id="password" name="password"
                                       placeholder="Password"
                                       className="form-control"
-                                      onChange={handlePasswordChange}
+                                    //   onChange={handlePasswordChange}
                                       type="password"
                                       validators={{
                                           required,
@@ -165,7 +148,7 @@ const SignInModal = ({authStatus,
                                   />
                               </div>
                               <div className="form-group button-group">
-                                  <button type="submit" color="primary" onClick={() => handleLogin()}>
+                                  <button type="submit" color="primary">
                                       Login
                                   </button>
                                   <button className="back-button" type="button" color="gray" onClick={() => handleModalClose()}>
@@ -178,13 +161,14 @@ const SignInModal = ({authStatus,
                           </div>
                           <div className="message-container">
                               {
-                                warningMessage ? <p className="message warning">Oops!! Wrong username or password!!</p> : <p></p>
+                                authStatus.errMess === "Error 401: Unauthorized" ? 
+                                <p className="message warning">Oops!! Wrong username or password!!</p> : 
+                                <p></p>
                               }   
                               {
                                 authStatus.isAuthenticated ?
-                                loginMessage ? <p className="message success">Welcome Back {authStatus.user.username}</p> : 
-                                <p></p> :
-                                <p></p>
+                                <p className="message success">Welcome Back {(authStatus.user.username).toUpperCase()}</p> : 
+                                <p></p> 
                               } 
                               {
                                 authStatus.isAuthenticated ?

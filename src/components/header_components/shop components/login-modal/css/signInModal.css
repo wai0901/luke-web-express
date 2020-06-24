@@ -140,6 +140,18 @@
   color: #b4b4b4;
 }
 
+.modal-container .login-card .form-container .message-container .message {
+  font-weight: bold;
+}
+
+.modal-container .login-card .form-container .message-container .warning {
+  color: #eb4559;
+}
+
+.modal-container .login-card .form-container .message-container .success {
+  color: #299114;
+}
+
 .modal-container:focus {
   outline: 0 !important;
 }

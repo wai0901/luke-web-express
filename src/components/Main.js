@@ -16,23 +16,24 @@ import ThankYou from './bodyComponets/thank-you/ThankYou';
 import Loading from './loading/Loading';
 import Admin from './admin/Admin';
 import { fetchMainData, 
-    fetchCategoryData, 
-    fetchItemsData, 
+    // fetchCategoryData, 
+    // fetchItemsData, 
     postCartItems, 
     updateCartItems, 
     fetchCartData,
    } from '../redux/ActionCreater';
 import { CSSTransition } from 'react-transition-group';
 import './css/Main.css';
-
+import {WEBSITEDATA} from '../shared/websiteData'
 
 
 
 const mapStateToProps = state => {
-    console.log(state)
+    console.log(state.auth)
     return {
         mainData: state.mainPage.homeMenu.data,
-        categoryData: state.category.category.data,
+        // categoryData: state.category.category.data,
+        // itemsData: state.items.items.data,
         itemsData: state.items.items.data,
         inCartItems: state.cartItem.cart.data,
         authStatus: state.auth,
@@ -45,8 +46,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-    fetchCategoryData: (link) => (fetchCategoryData(link)),
-    fetchItemsData: (link, categoryId) => (fetchItemsData(link, categoryId)),
+    // fetchCategoryData: (link) => (fetchCategoryData(link)),
+    // fetchItemsData: (link, categoryId) => (fetchItemsData(link, categoryId)),
     postCartItems: (cartItem) => (postCartItems(cartItem)),
     updateCartItems: (cartItem, id) => (updateCartItems(cartItem, id)),
     fetchMainData,
@@ -56,8 +57,8 @@ const mapDispatchToProps = {
 const Main = (props) => {
 
     const mainData = props.mainData;
-    const categoryData = props.categoryData;
-    const itemsData = props.itemsData;
+    // const categoryData = props.categoryData;
+    // const itemsData = props.itemsData;
     const inCartItems = props.inCartItems;
     const authStatus =  props.authStatus;
     const mainLoading = props.mainLoading;
@@ -66,28 +67,48 @@ const Main = (props) => {
     const inCartItemsLoading = props.inCartItemsLoading;
     const authLoading = props.authLoading;
     
-
+    // for the item detail page
     const [ pickedItem, setPickedItem ] = useState("");
+
+    // To check if the preivous route is from sign up form, which avoid history.goBack go back to the same page.
     const [ signinRoute, setSigninRoute ] = useState(false);
+
+    // for Signin modal
     const [ modalOpen, setModalOpen ] = useState(false);
+
+    // for Category Data
+    const [ catData, setCatData ] = useState('')
+
+    // for Item Data
+    const [ itemsData, setItemsData ] = useState('')
+
 
     useEffect(() => {
         props.fetchMainData();
         props.fetchCartData();
     }, [])
     
-
+    //for Category 
     const handleCatChange = (link) =>{ 
-        props.fetchCategoryData(link);}
+        const data = WEBSITEDATA[link]
+        setCatData(() => data);
+    }
     
-    const handleHeaderCatChange = (link) => 
-        props.fetchCategoryData(link);
+    //for header's menu bar to change category
+    const handleHeaderCatChange = (link) => {
+        const data = WEBSITEDATA[link]
+        setCatData(() => data);
+    }
     
-    const handleItemsChange = (link, categoryId) => 
-        props.fetchItemsData(link, categoryId);
+    //for item page
+    const handleItemsChange = (link) => {
+        const item = WEBSITEDATA[link]
+        setItemsData(() => item);
+    }
 
+    //for item detail page
     const handlePickedItem = (item) => 
-        setPickedItem(item);
+        setPickedItem(() => item);
 
 
     //For adding new items to cart
@@ -118,7 +139,8 @@ const Main = (props) => {
                 appear
                 >
                     <SelectedCat 
-                        categoryData={categoryData}
+                        // categoryData={categoryData}
+                        catData={catData}
                         handleItemsChange={handleItemsChange}
                         catIsLoading={catIsLoading}
                     />
@@ -146,17 +168,10 @@ const Main = (props) => {
     // ItemDetail page 
     const RenderItemDetail = ({match}) => {
         return (
-            <CSSTransition
-                in={match != null}
-                timeout={1000}
-                classNames="fade"
-                appear
-                >
-                    <ItemDetail 
-                        pickedItem={pickedItem}
-                        addCartHandler={addCartHandler}
-                    />
-                </CSSTransition>
+            <ItemDetail 
+                pickedItem={pickedItem}
+                addCartHandler={addCartHandler}
+            />
         )
     }
 

@@ -26,17 +26,17 @@
   z-index: 2;
 }
 
-.cart-container .top-section .top-container .button {
+.cart-container .top-section .top-container .buttons {
   position: relative;
   top: 15px;
   pointer-events: fill;
 }
 
-.cart-container .top-section .top-container .button h1 > span {
+.cart-container .top-section .top-container .buttons h1 > span {
   font-size: 1.2rem;
 }
 
-.cart-container .top-section .top-container .button .checkout-button {
+.cart-container .top-section .top-container .buttons .checkout-button {
   list-style: none;
   text-decoration: none;
 }

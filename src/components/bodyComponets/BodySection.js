@@ -32,9 +32,9 @@ const BodySection = ({ mainData, handleCatChange }) => {
                         return <div key={select.id} 
                                     style={selection} 
                                     className={select.style}
-                                    onClick={() => handleCatChange(select.link)}
+                                    
                                     >
-                            <Link to={"/" + select.link}>
+                            <Link to={"/" + select.link} onClick={() => handleCatChange(select.link)}>
                                 <div className="selection-container">
                                     <div className="menu-info">
                                         <h1>{select.title}</h1>

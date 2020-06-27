@@ -39,8 +39,8 @@
 
 .fade-appear-active, .slide-enter .slide-enter-active {
   opacity: 1;
-  -webkit-transition: opacity 200ms linear 150ms;
-  transition: opacity 200ms linear 150ms;
+  -webkit-transition: opacity 300ms linear 150ms;
+  transition: opacity 300ms linear 150ms;
 }
 
 .fade-exit {
@@ -49,7 +49,7 @@
 
 .fade-exit.slide-exit-active {
   opacity: 0;
-  -webkit-transition: opacity 200ms linear;
-  transition: opacity 200ms linear;
+  -webkit-transition: opacity 100ms linear;
+  transition: opacity 100ms linear;
 }
 /*# sourceMappingURL=Main.css.map */

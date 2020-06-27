@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom'
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { v4 as uuidv4 } from 'uuid';
 import CheckOutItem from './CheckOutItem';
 import { fetchCartData, updateCartItems, removeCartItems, checkoutOrder } from '../../../redux/ActionCreater';
 import './css/ShoppingCart.css';
@@ -77,13 +78,13 @@ const ShoppingCart = ({inCartItems,
         <div className="cart-container">
             <div className="top-section">
                 <div className="top-container">
-                    <div className="button">
+                    <div className="buttons">
                         <Button onClick={() => history.goBack()} variant="outlined" size="middle" className={classes.buttonStyle}>Back</Button>
                     </div>
-                    <div className="button total">
+                    <div className="buttons total">
                         <h1><span>$</span> {inCartItems ? cartTotal : "0.00"} <span>USD</span></h1>
                     </div>
-                    <div className="button">
+                    <div className="buttons">
                         {
                             !authStatus.isAuthenticated ?
                             <Link className="checkout-button"><Button onClick={() => handleModalOpen()} variant="outlined" size="middle" className={classes.buttonStyle}>Check Out</Button></Link> :
@@ -100,6 +101,7 @@ const ShoppingCart = ({inCartItems,
                             <CheckOutItem 
                                 item={item}
                                 changeQtyHandler={changeQtyHandler}
+                                keyId={uuidv4()}
                             />)
                     }
                 </ul>

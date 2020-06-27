@@ -30,11 +30,11 @@ const ItemForm = (props) => {
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => {
-      setOpen(true);
+      setOpen(() => true);
     };
 
     const handleClose = () => {
-      setOpen(false);
+      setOpen(() => false);
     };
 
     return <React.Fragment>

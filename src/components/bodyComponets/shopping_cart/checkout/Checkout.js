@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { checkoutOrder } from '../../../../redux/ActionCreater';
+import { v4 as uuidv4 } from 'uuid';
 import CC from './credit-card/CreditCard';
-
-
 import './css/checkout.css';
+
+
+const mapStateToProps = state => {
+    
+    return {
+        clientInfo: state.auth.user
+    }
+}
 
 const mapDispatchToProps = {
     checkoutOrder: (order) => (checkoutOrder(order)),
 }
 
-const Checkout= ({inCartItems, cartTotal, checkoutOrder}) => {
+const Checkout= ({inCartItems, cartTotal, checkoutOrder, clientInfo}) => {
 
     let tax = (cartTotal * 0.09).toFixed(2);
     let deliveryFee = cartTotal? 4.99: 0;
@@ -44,27 +51,44 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder}) => {
                 }, 5000);
     }
     
+    //customer info
+    // const [ customerInfo, setCustomerInfo ] = useState({
+    //     _id: clientInfo._id,
+    //     lastname: clientInfo.lastname,
+    //     firstname: clientInfo.firstname,
+    //     street: clientInfo.street,
+    //     city: clientInfo.city,
+    //     state: clientInfo.state,
+    //     zip: clientInfo.zip,
+    //     tel: formatPhoneNumber(Number(clientInfo.tel)),
+    //     username: clientInfo.username
+    // })
+    // console.log(customerInfo)
+    const [ customerInfo, setCustomerInfo ] = useState(
+        JSON.parse(localStorage.getItem('user')) || []
+    )
+    console.log(customerInfo)
+
     //temp
-    const customer = {
-        customerInfo: {
-            userId: "test123",
-            lastName: "Tommy",
-            firstName: "Ku",
-            street: "999 Test Street",
-            city: "Test City",
-            state: "CA",
-            zip: "91711",
-            tel: formatPhoneNumber(Number("9999999999")),
-        },
-        accountInfo: {
-            userName: "Test123",
-            email: "test@test.com",
-            password: "testtest",
-        },
-        promotion: true,
-        admin: false
+    
+    const handleCustomerInfoChange = (info) => {
+        setCustomerInfo(prevInfo => ({
+            ...prevInfo,
+            firstname: info
+        }))
+        return localStorage.setItem('user', JSON.stringify({
+            _id: clientInfo._id,
+            lastname: clientInfo.lastname,
+            firstname: info,
+            street: clientInfo.street,
+            city: clientInfo.city,
+            state: clientInfo.state,
+            zip: clientInfo.zip,
+            tel: formatPhoneNumber(Number(clientInfo.tel)),
+            username: clientInfo.username
+        }));
     }
-    const customerInfo = customer.customerInfo;
+    
 
     //formate the phonenumber
     function formatPhoneNumber(phoneNumberString) {
@@ -76,17 +100,15 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder}) => {
         return null
       }
 
-
-
     return (
         <div className="checkout-container">
             <div className="cards-container">
-                <div class="card-items">
-                    <div class="checkout-items-list  borderLine-share">
+                <div className="card-items">
+                    <div className="checkout-items-list  borderLine-share">
                         {
                             inCartItems &&
                             inCartItems.map(item => 
-                                <div class="checkout-item">
+                                <div className="checkout-item" key={uuidv4()}> 
                                     <p>{item.title}</p>
                                     <p>Qty: {item.quantity}</p>
                                     <p>{(Number(item.price) * Number(item.quantity)).toFixed(2)}</p>
@@ -94,8 +116,8 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder}) => {
                             )
                         } 
                     </div>
-                    <div class="checkout-items-list fontBold-share">
-                        <div class="checkout-item">
+                    <div className="checkout-items-list fontBold-share">
+                        <div className="checkout-item">
                             <div></div>
                             <div></div>
                             <div>
@@ -103,8 +125,8 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder}) => {
                             </div>
                         </div>
                     </div>
-                    <div class="checkout-items-list">
-                        <div class="checkout-item">
+                    <div className="checkout-items-list">
+                        <div className="checkout-item">
                             <div>
                                 <p>Estimated Sales Tax</p>
                             </div>
@@ -114,8 +136,8 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder}) => {
                             </div>
                         </div>
                     </div>
-                    <div class="checkout-items-list borderLine-share">
-                        <div class="checkout-item">
+                    <div className="checkout-items-list borderLine-share">
+                        <div className="checkout-item">
                             <div>
                                 <p>Delivery Fee</p>
                             </div>
@@ -125,8 +147,8 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder}) => {
                             </div>
                         </div>
                     </div>
-                    <div class="col checkout-items-list fontBold-share">
-                        <div class="row checkout-item largeFont-share">
+                    <div className="col checkout-items-list fontBold-share">
+                        <div className="row checkout-item largeFont-share">
                             <div></div>
                             <div>
                                 <p>Total</p>
@@ -137,29 +159,29 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder}) => {
                         </div>
                     </div>
                 </div>
-                <div class="card-info">
-                    <div class="checkout-customer checkout-css-share borderLine-share">
-                        <div class="contact-info">
+                <div className="card-info">
+                    <div className="checkout-customer checkout-css-share borderLine-share">
+                        <div className="contact-info">
                             <div>
                                 <h6>Billing Info</h6>
                             </div>
                             <div>
-                                <p>{customerInfo.firstName} {customerInfo.lastName}</p>
+                                <p>{customerInfo.firstname} {customerInfo.lastname}</p>
                                 <p>{customerInfo.email}</p>
                                 <p>{customerInfo.tel}</p>
                                 <p>{customerInfo.street},</p>
                                 <p>{customerInfo.city}, {customerInfo.zip}</p>
                             </div>
                             <div className="edit-info-share">
-                                <a href="editBillingInfo">Edit</a>
+                                <button href="" onClick={() => handleCustomerInfoChange("May")}>Edit</button>
                             </div>
                         </div>
-                        <div class="contact-info">
+                        <div className="contact-info">
                             <div>
                                 <h6>Delivery Info</h6>
                             </div>
                             <div>
-                                <p>{customerInfo.firstName} {customerInfo.lastName}</p>
+                                <p>{customerInfo.firstname} {customerInfo.lastname}</p>
                                 <p>{customerInfo.email}</p>
                                 <p>{customerInfo.tel}</p>
                                 <p>{customerInfo.street},</p>
@@ -170,7 +192,7 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder}) => {
                             </div>
                         </div>                                
                     </div>
-                    <div class="checkout-card-info checkout-css-share">
+                    <div className="checkout-card-info checkout-css-share">
                         <CC 
                             handleOrderSubmit={handleOrderSubmit}
                         />
@@ -181,4 +203,4 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder}) => {
     )
 }
 
-export default connect(null, mapDispatchToProps)(Checkout);
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

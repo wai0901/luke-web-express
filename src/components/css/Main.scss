@@ -40,12 +40,12 @@ $containerColor: #E5E5E5;
 }
 .fade-appear-active, .slide-enter .slide-enter-active {
     opacity: 1;
-    transition: opacity 200ms linear 150ms;
+    transition: opacity 300ms linear 150ms;
 }
 .fade-exit {
     opacity: 1;
 }
 .fade-exit.slide-exit-active {
     opacity: 0;
-    transition: opacity 200ms linear;
+    transition: opacity 100ms linear;
 }

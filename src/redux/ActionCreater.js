@@ -3,7 +3,7 @@ import axios from 'axios';
 import { baseUrl } from '../shared/baseUrl';
 
 
-//Fetch Data from server
+// Fetch Data from server
 // export const fetchMainData = () => dispatch => {
 //     dispatch(mainDataLoading());
 
@@ -16,6 +16,7 @@ import { baseUrl } from '../shared/baseUrl';
 //     })
 //     .then(response => {
 //             if (response.ok) {
+//                 console.log(response)
 //                 return response;
 //             } else {
 //                 const error = new Error(`Error ${response.status}: ${response.statusText}`);
@@ -210,20 +211,7 @@ export const checkoutOrder = (order) => dispatch => {
     );
 };
 
-// Admin Route
-
-// export const ordersData = () => async dispatch => {
-//     dispatch(fetchOrdersDataLoading());
-//     try {
-//         const response = await axios.get(baseUrl + 'orders');
-//         console.log(response)
-//         dispatch(fetchOrdersData(response));
-//     }
-//     catch (error) {
-//         dispatch(fetchOrdersDataFailed(error));
-//     }
-// };
-
+//check order
 export const ordersData = () => dispatch => {
     dispatch(fetchOrdersDataLoading());
 
@@ -249,6 +237,7 @@ export const ordersData = () => dispatch => {
     .then(orders => dispatch(fetchOrdersData(orders)))
     .catch(error => dispatch(fetchOrdersDataFailed(error.message)));
 }
+
 
 export const fetchOrdersDataFailed = errMess => ({
     type: ActionTypes.FETCH_ORDERS_DATA_FAILED,
@@ -297,6 +286,7 @@ export const userLogin = creds => dispatch => {
             // If login was successful, set the token in local storage
             localStorage.setItem('token', response.token);
             localStorage.setItem('creds', JSON.stringify(creds));
+            localStorage.setItem('user', JSON.stringify(response.user));
             console.log(response)
             // Dispatch the success action
             dispatch(receiveLogin(response));
@@ -320,7 +310,7 @@ export const requestLogin = creds => {
 export const receiveLogin = response => {
     return {
         type: ActionTypes.LOGIN_SUCCESS,
-        token: response.token
+        token: response
     }
 }
   
@@ -348,6 +338,7 @@ export const logoutUser = () => (dispatch) => {
     dispatch(requestLogout())
     localStorage.removeItem('token');
     localStorage.removeItem('creds');
+    localStorage.removeItem('user');
     alert('Your are logged out, come again!!');
     // dispatch(favoritesFailed("Error 401: Unauthorized"));
     dispatch(receiveLogout())

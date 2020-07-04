@@ -36,13 +36,13 @@ function CheckOutItem({item, changeQtyHandler, keyId}) {
                         <div>
                             <p>qty: {item.quantity}</p>
                             <ButtonGroup size="small" aria-label="small outlined button group">
-                                <Button onClick={() => changeQtyHandler(item, item._id, "plus")}>+</Button>
-                                <Button onClick={() => changeQtyHandler(item, item._id, "minus")}>-</Button>
+                                <Button onClick={() => changeQtyHandler(item, item.productId, "plus")}>+</Button>
+                                <Button onClick={() => changeQtyHandler(item, item.productId, "minus")}>-</Button>
                             </ButtonGroup>
                         </div>
                         <div>
                             <IconButton aria-label="delete" className={classes.margin}>
-                                <DeleteIcon onClick={() => changeQtyHandler(item, item._id, "remove")} fontSize="small" />
+                                <DeleteIcon onClick={() => changeQtyHandler(item, item.productId, "remove")} fontSize="small" />
                             </IconButton>
                         </div>
                     </div>

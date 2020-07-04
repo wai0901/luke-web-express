@@ -120,7 +120,7 @@ export const WEBSITEDATA = {
             "name": "blazers",
             "image": "https://images.pexels.com/photos/735307/pexels-photo-735307.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
             "position": "50%",
-            " link": "productsItems",
+            "link": "productsItems",
             "switch": false,
             "style": "normal",
             "title": "blazers",

@@ -15,7 +15,8 @@ import Signup from './bodyComponets/login/Signup';
 import ThankYou from './bodyComponets/thank-you/ThankYou';
 import Loading from './loading/Loading';
 import Admin from './admin/Admin';
-import { fetchMainData, 
+import { 
+    // fetchMainData, 
     // fetchCategoryData, 
     // fetchItemsData, 
     postCartItems, 
@@ -29,15 +30,15 @@ import {WEBSITEDATA} from '../shared/websiteData'
 
 
 const mapStateToProps = state => {
-    console.log(state.auth)
+    console.log(state.cartItem.cart.data)
     return {
-        mainData: state.mainPage.homeMenu.data,
+        // mainData: state.mainPage.homeMenu.data,
         // categoryData: state.category.category.data,
         // itemsData: state.items.items.data,
         itemsData: state.items.items.data,
         inCartItems: state.cartItem.cart.data,
         authStatus: state.auth,
-        mainLoading: state.mainPage.isLoading,
+        // mainLoading: state.mainPage.isLoading,
         catIsLoading: state.category.isLoading,
         itemsDataLoading: state.items.isLoading,
         inCartItemsLoading: state.cartItem.isLoading,
@@ -50,13 +51,13 @@ const mapDispatchToProps = {
     // fetchItemsData: (link, categoryId) => (fetchItemsData(link, categoryId)),
     postCartItems: (cartItem) => (postCartItems(cartItem)),
     updateCartItems: (cartItem, id) => (updateCartItems(cartItem, id)),
-    fetchMainData,
+    // fetchMainData,
     fetchCartData,
 };
 
 const Main = (props) => {
 
-    const mainData = props.mainData;
+    const mainData = WEBSITEDATA.homeMenu;
     // const categoryData = props.categoryData;
     // const itemsData = props.itemsData;
     const inCartItems = props.inCartItems;
@@ -82,10 +83,25 @@ const Main = (props) => {
     // for Item Data
     const [ itemsData, setItemsData ] = useState('')
 
+    // // for total Qty in cart
+    // const [ cartQty, setCartQty ] = useState(0);
+
+    // // for total price in cart
+    // const [ cartTotal, setCartTotal ] = useState(0);
 
     useEffect(() => {
-        props.fetchMainData();
+        // props.fetchMainData();
         props.fetchCartData();
+
+        // if (!inCartItems) {
+        //     setCartQty(() => 
+        //     inCartItems.cartItems.map(item => Number(item.quantity)).reduce((t, c) => t + c, 0));
+
+        //     setCartTotal(() =>
+        //     inCartItems.cartItems.map(item => Number(item.quantity * item.price)).reduce((t, c) => t + c, 0).toFixed(2));
+        // };
+        
+
     }, [])
     
     //for Category 
@@ -113,20 +129,29 @@ const Main = (props) => {
 
     //For adding new items to cart
     const addCartHandler = ({pickedItem, size, qty}) => {
-        if (inCartItems) {
-            if(findCartItem(inCartItems, pickedItem, size)){
-                console.log(findCartItem(inCartItems, pickedItem, size))
-                //find and update the item which already in cart
-                let updatedItem = sameItemInCart(inCartItems, pickedItem, size, qty);
-                let updatedItemId = updatedItem._id;
-                return props.updateCartItems(updatedItem, updatedItemId);
+        //to check if the user is logged in
+        if (authStatus.isAuthenticated) {
+
+            if (inCartItems === undefined || inCartItems.length === 0) {
+                // Cart is empty
+                props.postCartItems(addCartItem(inCartItems, pickedItem, size, qty, authStatus));
             } else {
-                props.postCartItems(addCartItem(pickedItem, size, qty));
-                console.log(addCartItem(pickedItem, size, qty))
-            }
+                // Cart is not empty
+                if(findCartItem(inCartItems[0].cartItems, pickedItem, size)){
+                    //find and update the item which already in cart
+                    let updatedItem = sameItemInCart(inCartItems[0].cartItems, pickedItem, size, qty);
+                    let updatedItemId = inCartItems[0]._id;
+                    return props.updateCartItems(updateItemInCart(inCartItems[0], updatedItem), updatedItemId);
+                } else {
+                    //cart has item, but not the same item, push to existing cart items
+                    let updatedItemId = inCartItems[0]._id;
+                    props.updateCartItems(addCartItem(inCartItems, pickedItem, size, qty, authStatus), updatedItemId);
+                }
+            }  
+            //user is not logged in, will save item to local storage
         } else {
-            props.postCartItems(addCartItem(pickedItem, size, qty));
-        }          
+            console.log(addCartItem(inCartItems, pickedItem, size, qty, authStatus));
+        }    
     }
 
     //Menu 
@@ -183,16 +208,15 @@ const Main = (props) => {
     const handleModalClose = () => {
       setModalOpen(false);
     };
+    
+    // Total qty of items in cart
+    const cartQty = inCartItems === undefined || inCartItems.length === 0 ?
+        0 :
+        inCartItems[0].cartItems.map(item => Number(item.quantity)).reduce((t, c) => t + c, 0) ;
 
-
-    //Total qty of items in cart
-    const cartQty = props.inCartItems ?
-        props.inCartItems.map(item => Number(item.quantity)).reduce((t, c) => t + c, 0) :
-        0 ;
-
-    const cartTotal = props.inCartItems ?
-        props.inCartItems.map(item => Number(item.quantity * item.price)).reduce((t, c) => t + c, 0).toFixed(2) :
-        0.00;
+    const cartTotal = inCartItems === undefined || inCartItems.length === 0 ?
+         0.00 :
+        inCartItems[0].cartItems.map(item => Number(item.quantity * item.price)).reduce((t, c) => t + c, 0).toFixed(2);
      
     return (
         <div className="bg">
@@ -235,7 +259,7 @@ const Main = (props) => {
                         } />
                         <Route path="/checkout" exact render={() => 
                             <Checkout 
-                                inCartItems={inCartItems}
+                                inCartItems={inCartItems[0].cartItems}
                                 cartTotal={cartTotal}
                             />
                         } />
@@ -255,18 +279,18 @@ const Main = (props) => {
                     <Footer />
                 </div>
             </Router>
-            { mainLoading ||
+            {/* { 
+            mainLoading ||
               catIsLoading ||
               inCartItemsLoading ||
               itemsDataLoading ||
               authLoading ? 
               <Loading /> : 
               null 
-            }
+            } */}
         </div>
     )
 }
-
 
 // find cart items
 const findCartItem = (items, inputItem, size) => {
@@ -283,19 +307,61 @@ const sameItemInCart = (cartItems, newItem, size, qty) => {
     }
 }
 
-//add new item to cart
-const addCartItem = (item, size, qty) => {
-    let productId = item.productId.concat(size)
-    let id = item.id.concat(size)
-
+// update the item in cart
+const updateItemInCart = (cartItems, updatedNewItem) => {
+    let remainCartItems = cartItems.cartItems.filter(item => item.productId !== updatedNewItem.productId);
     return {
-        ...item,
-        id: id,
-        productId: productId,
-        size: size,
-        quantity: qty,
-        date: new Date().toISOString()
-    };
+        ...cartItems,
+        cartItems: [
+            ...remainCartItems,
+            {...updatedNewItem}
+        ]
+    }
+}
+
+//add new item to cart
+const addCartItem = (inCartItems, newItem, size, qty, auth) => {
+    console.log(newItem)
+    let productId = newItem.productId.concat(size);
+    let id = newItem.id.concat(size);
+    let userId = auth.isAuthenticated ?
+                (JSON.parse(localStorage.getItem('user')) || [])._id :
+                "Not Register User";
+
+    //check if the cart is empty
+    if (inCartItems === undefined || inCartItems.length === 0) {
+        return {
+            userId: userId,
+            purchased: false,
+            cartItems: [{
+                ...newItem,
+                productId: productId,
+                id: id,
+                size: size,
+                quantity: qty,
+                date: new Date().toISOString()
+            }]
+        };
+    //cart is not empty, but items in cart are not the same
+    } else {
+        return {
+            userId: userId,
+            purchased: false,
+            cartItems: [
+                ...inCartItems[0].cartItems,
+                {
+                ...newItem,
+                productId: productId,
+                id: id,
+                size: size,
+                quantity: qty,
+                date: new Date().toISOString()
+            }
+        ]
+        };
+    }
+
+    
 }
 
 

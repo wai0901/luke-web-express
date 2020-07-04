@@ -77,20 +77,23 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, clientInfo}) => {
             firstname: info
         }))
         return localStorage.setItem('user', JSON.stringify({
-            _id: clientInfo._id,
-            lastname: clientInfo.lastname,
+            _id: customerInfo._id,
+            lastname: customerInfo.lastname,
             firstname: info,
-            street: clientInfo.street,
-            city: clientInfo.city,
-            state: clientInfo.state,
-            zip: clientInfo.zip,
-            tel: formatPhoneNumber(Number(clientInfo.tel)),
-            username: clientInfo.username
+            address: {
+                street: customerInfo.address.street,
+                city: customerInfo.address.city,
+                state: customerInfo.address.state,
+                zip: customerInfo.address.zip
+            },
+            tel: formatPhoneNumber(Number(customerInfo.tel)),
+            username: customerInfo.username,
+            email: customerInfo.email
         }));
     }
     
 
-    //formate the phonenumber
+    //format the phonenumber
     function formatPhoneNumber(phoneNumberString) {
         var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
         var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
@@ -169,8 +172,8 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, clientInfo}) => {
                                 <p>{customerInfo.firstname} {customerInfo.lastname}</p>
                                 <p>{customerInfo.email}</p>
                                 <p>{customerInfo.tel}</p>
-                                <p>{customerInfo.street},</p>
-                                <p>{customerInfo.city}, {customerInfo.zip}</p>
+                                <p>{customerInfo.address.street},</p>
+                                <p>{customerInfo.address.city}, {customerInfo.address.state} {customerInfo.address.zip}</p>
                             </div>
                             <div className="edit-info-share">
                                 <button href="" onClick={() => handleCustomerInfoChange("May")}>Edit</button>
@@ -184,8 +187,8 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, clientInfo}) => {
                                 <p>{customerInfo.firstname} {customerInfo.lastname}</p>
                                 <p>{customerInfo.email}</p>
                                 <p>{customerInfo.tel}</p>
-                                <p>{customerInfo.street},</p>
-                                <p>{customerInfo.city}, {customerInfo.zip}</p>
+                                <p>{customerInfo.address.street},</p>
+                                <p>{customerInfo.address.city}, {customerInfo.address.state} {customerInfo.address.zip}</p>
                             </div>
                             <div className="edit-info-share">
                                 <a href="editDeliveryInfo">Edit</a>

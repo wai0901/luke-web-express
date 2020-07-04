@@ -39,12 +39,15 @@ const ShoppingCart = ({inCartItems,
         fetchCartData();
     }, [])
 
+    const cart = inCartItems ? inCartItems[0].cartItems : [];
+
+
     // sort the cart items
     const sortedItems = 
         //check if any item in cart
-        inCartItems &&
+        cart &&
         //start sorting
-        inCartItems.sort((a, b) => {
+        cart.sort((a, b) => {
         let itemA = a.productId.toUpperCase();
         let itemB = b.productId.toUpperCase();
         if (itemA < itemB) {
@@ -56,17 +59,24 @@ const ShoppingCart = ({inCartItems,
         return 0;
     });
 
-    const changeQtyHandler = (item, id, action) => {
+    const changeQtyHandler = (item, productId, action) => {
         let qty = Number(item.quantity);
-
+        let cartId = inCartItems[0]._id;
+        let numOfItemsInCart = inCartItems[0].cartItems.length;
+        let remainCartItems = inCartItems[0].cartItems.filter(item => item.productId !== productId);
+        
         if (action === "plus") {
-            updateCartItems({...item, quantity: qty + 1}, id);
-        } else if (action === "minus") {
-            qty === 1 || qty === "1"?
-            removeCartItems(id):
-            updateCartItems({...item, quantity: qty - 1}, id);
-        } else if (action === "remove") {
-            removeCartItems(id);
+            updateCartItems(updateQtyToItem(inCartItems[0], item, qty, action, remainCartItems), cartId);
+        } else if (action === "minus" && qty > 1) {
+            updateCartItems(updateQtyToItem(inCartItems[0], item, qty, action, remainCartItems), cartId);
+        } else if (action === "minus" && qty === 1 && numOfItemsInCart === 1) {
+            removeCartItems(cartId);
+        } else if (action === "minus" && qty === 1 && numOfItemsInCart > 1) {
+            updateCartItems(removeItem(inCartItems[0], remainCartItems), cartId);
+        } else if (action === "remove" && numOfItemsInCart > 1) {
+            updateCartItems(removeItem(inCartItems[0], remainCartItems), cartId);
+        } else if (action === "remove" && numOfItemsInCart === 1) {
+            removeCartItems(cartId);
         }
     }
 
@@ -115,6 +125,32 @@ const ShoppingCart = ({inCartItems,
             </div>
         </div>
     )
+}
+
+const updateQtyToItem = (cartItems, newItem, qty, action, remainCartItems) => {
+    let updatedItem;
+
+    action === "plus" ?
+    updatedItem = {...newItem, quantity: qty + 1} :
+    updatedItem = {...newItem, quantity: qty - 1} 
+
+    return {
+        ...cartItems,
+        cartItems: [
+            ...remainCartItems,
+            {...updatedItem}
+        ]
+    }
+}
+
+const removeItem = (cartItems, remainCartItems) => {
+
+    return {
+        ...cartItems,
+        cartItems: [
+            ...remainCartItems,
+        ]
+    }
 }
 
 export default connect(null, mapDispatchToProps)(ShoppingCart);

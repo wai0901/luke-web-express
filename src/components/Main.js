@@ -16,9 +16,6 @@ import ThankYou from './bodyComponets/thank-you/ThankYou';
 import Loading from './loading/Loading';
 import Admin from './admin/Admin';
 import { 
-    // fetchMainData, 
-    // fetchCategoryData, 
-    // fetchItemsData, 
     postCartItems, 
     updateCartItems, 
     fetchCartData,
@@ -30,15 +27,11 @@ import {WEBSITEDATA} from '../shared/websiteData'
 
 
 const mapStateToProps = state => {
-    console.log(state.cartItem.cart.data)
+    console.log(state.cartItem)
     return {
-        // mainData: state.mainPage.homeMenu.data,
-        // categoryData: state.category.category.data,
-        // itemsData: state.items.items.data,
         itemsData: state.items.items.data,
-        inCartItems: state.cartItem.cart.data,
+        inCartItems: state.cartItem.cart,
         authStatus: state.auth,
-        // mainLoading: state.mainPage.isLoading,
         catIsLoading: state.category.isLoading,
         itemsDataLoading: state.items.isLoading,
         inCartItemsLoading: state.cartItem.isLoading,
@@ -47,27 +40,13 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-    // fetchCategoryData: (link) => (fetchCategoryData(link)),
-    // fetchItemsData: (link, categoryId) => (fetchItemsData(link, categoryId)),
     postCartItems: (cartItem) => (postCartItems(cartItem)),
     updateCartItems: (cartItem, id) => (updateCartItems(cartItem, id)),
-    // fetchMainData,
     fetchCartData,
 };
 
 const Main = (props) => {
 
-    const mainData = WEBSITEDATA.homeMenu;
-    // const categoryData = props.categoryData;
-    // const itemsData = props.itemsData;
-    const inCartItems = props.inCartItems;
-    const authStatus =  props.authStatus;
-    const mainLoading = props.mainLoading;
-    const catIsLoading = props.catIsLoading;
-    const itemsDataLoading = props.itemsDataLoading;
-    const inCartItemsLoading = props.inCartItemsLoading;
-    const authLoading = props.authLoading;
-    
     // for the item detail page
     const [ pickedItem, setPickedItem ] = useState("");
 
@@ -83,26 +62,32 @@ const Main = (props) => {
     // for Item Data
     const [ itemsData, setItemsData ] = useState('')
 
-    // // for total Qty in cart
-    // const [ cartQty, setCartQty ] = useState(0);
+    // add item to local storage for shopping cart if user is not authenticated
+    const [ localCart, setLocalCart ] = useState([]);
 
-    // // for total price in cart
-    // const [ cartTotal, setCartTotal ] = useState(0);
 
     useEffect(() => {
-        // props.fetchMainData();
-        props.fetchCartData();
 
-        // if (!inCartItems) {
-        //     setCartQty(() => 
-        //     inCartItems.cartItems.map(item => Number(item.quantity)).reduce((t, c) => t + c, 0));
+        //fetch the cart item from server
+        authStatus.isAuthenticated && props.fetchCartData();
 
-        //     setCartTotal(() =>
-        //     inCartItems.cartItems.map(item => Number(item.quantity * item.price)).reduce((t, c) => t + c, 0).toFixed(2));
-        // };
-        
+        //get the cart item data from local storage if user is not logged in
+        const loaclcartItem = JSON.parse(localStorage.getItem('cart')) || [];
+        loaclcartItem && setLocalCart(() => loaclcartItem);
 
     }, [])
+
+
+    const mainData = WEBSITEDATA.homeMenu;
+    const authStatus =  props.authStatus;
+    const catIsLoading = props.catIsLoading;
+    const itemsDataLoading = props.itemsDataLoading;
+    const inCartItemsLoading = props.inCartItemsLoading;
+    const authLoading = props.authLoading;
+    const inCartItems = authStatus.isAuthenticated ?
+                        props.inCartItems === [] ? [] : props.inCartItems[0] :
+                        localCart;
+                    
     
     //for Category 
     const handleCatChange = (link) =>{ 
@@ -129,29 +114,113 @@ const Main = (props) => {
 
     //For adding new items to cart
     const addCartHandler = ({pickedItem, size, qty}) => {
+
         //to check if the user is logged in
         if (authStatus.isAuthenticated) {
 
-            if (inCartItems === undefined || inCartItems.length === 0) {
+            // logged in user, items storge in server
+            if (inCartItems === undefined || inCartItems.length === 0 || inCartItems === []) {
+
                 // Cart is empty
                 props.postCartItems(addCartItem(inCartItems, pickedItem, size, qty, authStatus));
             } else {
+
                 // Cart is not empty
-                if(findCartItem(inCartItems[0].cartItems, pickedItem, size)){
+                if(findCartItem(inCartItems.cartItems, pickedItem, size)){
+
                     //find and update the item which already in cart
-                    let updatedItem = sameItemInCart(inCartItems[0].cartItems, pickedItem, size, qty);
-                    let updatedItemId = inCartItems[0]._id;
-                    return props.updateCartItems(updateItemInCart(inCartItems[0], updatedItem), updatedItemId);
+                    let updatedItem = sameItemInCart(inCartItems.cartItems, pickedItem, size, qty);
+                    let updatedItemId = inCartItems._id;
+                    return props.updateCartItems(updateItemInCart(inCartItems, updatedItem), updatedItemId);
                 } else {
+
                     //cart has item, but not the same item, push to existing cart items
-                    let updatedItemId = inCartItems[0]._id;
+                    let updatedItemId = inCartItems._id;
                     props.updateCartItems(addCartItem(inCartItems, pickedItem, size, qty, authStatus), updatedItemId);
                 }
             }  
-            //user is not logged in, will save item to local storage
         } else {
-            console.log(addCartItem(inCartItems, pickedItem, size, qty, authStatus));
+            //user is not logged in, will save item to local storage
+            if (localCart.length === 0) {
+                
+                //Cart is empty
+                let newItem = addCartItem(localCart, pickedItem, size, qty, authStatus)
+                localStorage.setItem('cart', JSON.stringify(newItem));
+            } else {
+
+                //cart is not empty
+                if(findCartItem(localCart.cartItems, pickedItem, size)) {
+
+                    //find and update the item which already in cart
+                    let updatedItem = sameItemInCart(localCart.cartItems, pickedItem, size, qty);
+                    let updatedItems = updateItemInCart(localCart, updatedItem, authStatus)
+                    localStorage.setItem('cart', JSON.stringify(updatedItems));;
+                } else {
+
+                    //cart has item, but not the same item, push to existing cart items
+                    let newItem = addCartItem(localCart, pickedItem, size, qty, authStatus)
+                    localStorage.setItem('cart', JSON.stringify(newItem));
+                }
+            }
+            //set State
+            let updateCart = JSON.parse(localStorage.getItem('cart')) || [];
+            return setLocalCart(() => updateCart);
         }    
+    }
+
+    /*After login, check if the server has exsiting items in cart,
+      if yes, then merge the items in the local storage and update to the server*/
+    const fetchAndUpdateCartItem = async () => {
+        let localItems = JSON.parse(localStorage.getItem('cart')) || [];
+        let serverItems = JSON.parse(localStorage.getItem('serverItems')) || [];
+        let user = JSON.parse(localStorage.getItem('user')) || [];
+
+        // check if the user has successfully loggin in
+        if (user !== []) {
+            
+            //check if the cart in server is empty
+            if (serverItems.length === 0) {
+                
+                //check if the cart in local storage is empty, if not push it to server
+                localItems !== [] && props.postCartItems(localItems);
+                
+            } else {
+                
+                //check if the cart in local storage is empty, if not merge with existing items
+                if (localItems.length !== 0) {
+                    
+                    //find the same cart items in serverside and localside and update the qty
+                    let mergedCartItems = await findSameObjects(serverItems.cartItems, localItems.cartItems)
+                                    .map(serverItem => {
+                                        let item;
+                                            localItems.cartItems.forEach(localItem => {
+                                            if (serverItem.productId === localItem.productId) {
+                                                
+                                                return item = {
+                                                    ...serverItem,
+                                                    quantity: +serverItem.quantity + +localItem.quantity
+                                                }
+                                            }
+                                        })
+                                        return item;
+                                    })
+                    //find the difference of cart items in serverside and localside
+                    let remainCartItems = await findDifferetObjects(serverItems.cartItems, localItems.cartItems)
+                    //update the obj
+                    let updatedItems = {
+                        ...serverItems,
+                        cartItems: [
+                            ...remainCartItems,
+                            ...mergedCartItems
+                        ]
+                    }
+                    let updatedItemId = serverItems._id;
+                    //upload to server
+                    props.updateCartItems(updatedItems, updatedItemId);
+                    localStorage.removeItem('serverItems');
+                }
+            }
+        }
     }
 
     //Menu 
@@ -164,7 +233,6 @@ const Main = (props) => {
                 appear
                 >
                     <SelectedCat 
-                        // categoryData={categoryData}
                         catData={catData}
                         handleItemsChange={handleItemsChange}
                         catIsLoading={catIsLoading}
@@ -210,13 +278,13 @@ const Main = (props) => {
     };
     
     // Total qty of items in cart
-    const cartQty = inCartItems === undefined || inCartItems.length === 0 ?
+    const cartQty = inCartItems === undefined || inCartItems.length === 0 || inCartItems === [] ?
         0 :
-        inCartItems[0].cartItems.map(item => Number(item.quantity)).reduce((t, c) => t + c, 0) ;
+        inCartItems.cartItems.map(item => Number(item.quantity)).reduce((t, c) => t + c, 0) ;
 
-    const cartTotal = inCartItems === undefined || inCartItems.length === 0 ?
+    const cartTotal = inCartItems === undefined || inCartItems.length === 0 || inCartItems === [] ?
          0.00 :
-        inCartItems[0].cartItems.map(item => Number(item.quantity * item.price)).reduce((t, c) => t + c, 0).toFixed(2);
+        inCartItems.cartItems.map(item => Number(item.quantity * item.price)).reduce((t, c) => t + c, 0).toFixed(2);
      
     return (
         <div className="bg">
@@ -233,6 +301,7 @@ const Main = (props) => {
                         handleModalOpen={handleModalOpen}
                         handleModalClose={handleModalClose}
                         modalOpen={modalOpen}
+                        fetchAndUpdateCartItem={fetchAndUpdateCartItem}
                     />
                     <div className="holder"> 
                         <Switch>                
@@ -259,8 +328,9 @@ const Main = (props) => {
                         } />
                         <Route path="/checkout" exact render={() => 
                             <Checkout 
-                                inCartItems={inCartItems[0].cartItems}
+                                inCartItems={inCartItems}
                                 cartTotal={cartTotal}
+                                authStatus={authStatus}
                             />
                         } />
                         <Route path="/shopping-cart" exact render={() => 
@@ -269,6 +339,8 @@ const Main = (props) => {
                                 cartTotal={cartTotal}
                                 authStatus={authStatus}
                                 handleModalOpen={handleModalOpen}
+                                localCart={localCart}
+                                setLocalCart={setLocalCart}
                             />
                         } />
                         <Route path="/:menuId" exact component={RenderMenu} />
@@ -279,15 +351,13 @@ const Main = (props) => {
                     <Footer />
                 </div>
             </Router>
-            {/* { 
-            mainLoading ||
-              catIsLoading ||
-              inCartItemsLoading ||
-              itemsDataLoading ||
-              authLoading ? 
-              <Loading /> : 
-              null 
-            } */}
+            {
+                inCartItemsLoading ||
+                itemsDataLoading ||
+                authLoading ? 
+                <Loading /> : 
+                null 
+            } 
         </div>
     )
 }
@@ -301,6 +371,7 @@ const findCartItem = (items, inputItem, size) => {
 // check if the item in the cart
 const sameItemInCart = (cartItems, newItem, size, qty) => {
     let item = findCartItem(cartItems, newItem, size);
+
     return {
         ...item,
         quantity: Number(item.quantity) + Number(qty)
@@ -308,10 +379,14 @@ const sameItemInCart = (cartItems, newItem, size, qty) => {
 }
 
 // update the item in cart
-const updateItemInCart = (cartItems, updatedNewItem) => {
+const updateItemInCart = (cartItems, updatedNewItem, auth) => {
     let remainCartItems = cartItems.cartItems.filter(item => item.productId !== updatedNewItem.productId);
+    let userId = JSON.parse(localStorage.getItem('user')) ?
+                (JSON.parse(localStorage.getItem('user')) || [])._id :
+                "Not Register User";
     return {
         ...cartItems,
+        userId: userId,
         cartItems: [
             ...remainCartItems,
             {...updatedNewItem}
@@ -321,15 +396,17 @@ const updateItemInCart = (cartItems, updatedNewItem) => {
 
 //add new item to cart
 const addCartItem = (inCartItems, newItem, size, qty, auth) => {
-    console.log(newItem)
+
     let productId = newItem.productId.concat(size);
     let id = newItem.id.concat(size);
     let userId = auth.isAuthenticated ?
                 (JSON.parse(localStorage.getItem('user')) || [])._id :
                 "Not Register User";
+    //to check it the cart data is come from server or localstorage
+    let checkInCartItems = auth.isAuthenticated ? inCartItems : inCartItems;
 
     //check if the cart is empty
-    if (inCartItems === undefined || inCartItems.length === 0) {
+    if (checkInCartItems === undefined || checkInCartItems.length === 0 || checkInCartItems === null) {
         return {
             userId: userId,
             purchased: false,
@@ -348,7 +425,7 @@ const addCartItem = (inCartItems, newItem, size, qty, auth) => {
             userId: userId,
             purchased: false,
             cartItems: [
-                ...inCartItems[0].cartItems,
+                ...checkInCartItems.cartItems,
                 {
                 ...newItem,
                 productId: productId,
@@ -360,10 +437,17 @@ const addCartItem = (inCartItems, newItem, size, qty, auth) => {
         ]
         };
     }
-
-    
 }
 
+//find the same objects in two arrays of objests
+const findSameObjects = (firstObjs, secondObjs) => firstObjs.filter(firstObj => secondObjs.some(secondObj =>
+    secondObj.productId === firstObj.productId));
+
+//find the different object in two arrays of objects
+const findDifferetObjects = (firstObjs, secondObjs) => firstObjs.filter(firstObj => 
+    !secondObjs.some(secondObj => secondObj.productId === firstObj.productId))
+    .concat(secondObjs.filter(secondObjTwo => 
+    !firstObjs.some(firstObjTwo => secondObjTwo.productId === firstObjTwo.productId)))
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
 

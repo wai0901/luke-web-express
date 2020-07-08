@@ -3,7 +3,6 @@ import * as ActionTypes from './ActionTypes';
 export const cartReducer = (state = { isLoading: false,
                                             errMess: null,
                                             cart: []}, action) => {
-
     switch(action.type) {
         case ActionTypes.FETCH_CART_LOADING:
             return {...state, isLoading: true, errMess: null, cart: []}

@@ -116,53 +116,129 @@ export const ItemsDataLoading = () => ({
 
 
 //Post to Server
-export const postCartItems = (cartItem) => async dispatch => {
+export const postCartItems = (cartItem) => dispatch => {
     dispatch(cartDataLoading());
-    
-    try {
-        await axios.post(baseUrl + 'carts', cartItem)
-        dispatch(fetchCartData());
-    }
-    catch (error) {
+
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + 'carts', {
+        method: 'POST',
+        body: JSON.stringify(cartItem),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': bearer
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => { throw error }
+    )
+    .then(response => response.json())
+    .then(() => dispatch(fetchCartData()))
+    .catch(error => { 
         dispatch(cartFailed(error));
-    }
-}
+    });
+};
 
 //Update request
-export const updateCartItems = (cartItem, id) => async dispatch => {
+export const updateCartItems = (cartItem, id) => dispatch => {
     dispatch(cartDataLoading());
-    try {
-        await axios.put(baseUrl + 'carts/' + id, cartItem)
-        dispatch(fetchCartData());
-    }
-    catch (error) {
-        dispatch(cartFailed(error));
-    }
-}
 
-//delete request
-export const removeCartItems = (id) => async dispatch => {
-    try {
-        await axios.delete(baseUrl + 'carts/' + id)
-        dispatch(fetchCartData());
-    }
-    catch (error) {
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + 'carts/' + id, {
+        method: 'PUT',
+        body: JSON.stringify(cartItem),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': bearer
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => { throw error }
+    )
+    .then(() => dispatch(fetchCartData()))
+    .catch(error => { 
         dispatch(cartFailed(error));
-    }
-}
+    });
+};
+
+//remove Cart item
+export const removeCartItems = id => dispatch => {
+    dispatch(cartDataLoading());
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + 'carts/' + id, {
+        method: "DELETE",
+        headers: {
+            'Authorization': bearer
+        },
+        credentials: "same-origin"
+    })
+    .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => { throw error; }
+    )
+    .then(response => response.json())
+    .then(item => {
+        console.log('Favorite Deleted', item);
+        dispatch(fetchCartData());
+    })
+    .catch(error => dispatch(cartFailed(error)));
+};
 
 //get cart Data from server
-export const fetchCartData = () => async dispatch => {
+export const fetchCartData = () => dispatch => {
     dispatch(cartDataLoading());
 
-    try {
-        const response = await axios.get(baseUrl + 'carts');
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + 'carts', {
+        headers: {
+            'Authorization': bearer
+        },
+    })
+    .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => { throw error; }
+    )
+    .then(response => response.json())
+    .then(response => {
         dispatch(addCartData(response));
-    }
-    catch (error) {
-        dispatch(ItemsFailed(error));
-    }
-};
+    })
+    .catch(error => dispatch(ItemsFailed(error.message)));
+}
 
 export const cartFailed = errMess => ({
     type: ActionTypes.FETCH_CART_FAILED,
@@ -257,11 +333,11 @@ export const fetchOrdersDataLoading = () => ({
 
 //Login Route
 
-export const userLogin = creds => dispatch => {
+export const userLogin = creds => async dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds))
 
-    return fetch(baseUrl + 'users/login', {
+    return await fetch(baseUrl + 'users/login', {
         method: 'POST',
         headers: { 
             'Content-Type':'application/json' 
@@ -287,7 +363,7 @@ export const userLogin = creds => dispatch => {
             localStorage.setItem('token', response.token);
             localStorage.setItem('creds', JSON.stringify(creds));
             localStorage.setItem('user', JSON.stringify(response.user));
-            console.log(response)
+            localStorage.setItem('serverItems', JSON.stringify(response.serverItems ? response.serverItems : []));
             // Dispatch the success action
             dispatch(receiveLogin(response));
             // alert('You are successfully signed in');
@@ -339,6 +415,7 @@ export const logoutUser = () => (dispatch) => {
     localStorage.removeItem('token');
     localStorage.removeItem('creds');
     localStorage.removeItem('user');
+    localStorage.removeItem('serverItems');
     alert('Your are logged out, come again!!');
     // dispatch(favoritesFailed("Error 401: Unauthorized"));
     dispatch(receiveLogout())

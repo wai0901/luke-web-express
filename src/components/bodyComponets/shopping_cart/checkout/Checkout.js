@@ -1,35 +1,33 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import { checkoutOrder } from '../../../../redux/ActionCreater';
+import { checkoutOrder, removeCartItems } from '../../../../redux/ActionCreater';
 import { v4 as uuidv4 } from 'uuid';
 import CC from './credit-card/CreditCard';
 import './css/checkout.css';
 
 
-const mapStateToProps = state => {
-    
-    return {
-        clientInfo: state.auth.user
-    }
-}
-
 const mapDispatchToProps = {
     checkoutOrder: (order) => (checkoutOrder(order)),
+    removeCartItems: (id) => (removeCartItems(id))
 }
 
-const Checkout= ({inCartItems, cartTotal, checkoutOrder, clientInfo}) => {
+const Checkout= ({inCartItems, cartTotal, checkoutOrder, authStatus, removeCartItems}) => {
 
     let tax = (cartTotal * 0.09).toFixed(2);
     let deliveryFee = cartTotal? 4.99: 0;
     let grandTotal = cartTotal > 0? (Number(cartTotal) + Number(tax) + Number(deliveryFee)).toFixed(2): "0.00";
 
     const history = useHistory();
+    const checkoutItems = inCartItems ? inCartItems.cartItems : [];
 
     const handleOrderSubmit = (e) => {
         e.preventDefault();
+        let userId = authStatus.isAuthenticated ?
+                (JSON.parse(localStorage.getItem('user')) || [])._id :
+                "Not Register User";
 
-        let orders = inCartItems.map(item => {
+        let orders = checkoutItems.map(item => {
             return {
                 id: item.id,
                 name: item.name,
@@ -40,37 +38,27 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, clientInfo}) => {
             }
         })
         let finalOrder = {
+            userId: userId,
             orders: orders,
             orderTotal: cartTotal
         }
 
         checkoutOrder(finalOrder);
         history.push('thankyou');
+        removeCartItems(inCartItems._id);
         setTimeout(() => {
             history.push('/');
                 }, 5000);
     }
     
-    //customer info
-    // const [ customerInfo, setCustomerInfo ] = useState({
-    //     _id: clientInfo._id,
-    //     lastname: clientInfo.lastname,
-    //     firstname: clientInfo.firstname,
-    //     street: clientInfo.street,
-    //     city: clientInfo.city,
-    //     state: clientInfo.state,
-    //     zip: clientInfo.zip,
-    //     tel: formatPhoneNumber(Number(clientInfo.tel)),
-    //     username: clientInfo.username
-    // })
+    
     // console.log(customerInfo)
     const [ customerInfo, setCustomerInfo ] = useState(
         JSON.parse(localStorage.getItem('user')) || []
     )
-    console.log(customerInfo)
+
 
     //temp
-    
     const handleCustomerInfoChange = (info) => {
         setCustomerInfo(prevInfo => ({
             ...prevInfo,
@@ -109,8 +97,8 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, clientInfo}) => {
                 <div className="card-items">
                     <div className="checkout-items-list  borderLine-share">
                         {
-                            inCartItems &&
-                            inCartItems.map(item => 
+                            checkoutItems &&
+                            checkoutItems.map(item => 
                                 <div className="checkout-item" key={uuidv4()}> 
                                     <p>{item.title}</p>
                                     <p>Qty: {item.quantity}</p>
@@ -206,4 +194,4 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, clientInfo}) => {
     )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Checkout);
+export default connect(null, mapDispatchToProps)(Checkout);

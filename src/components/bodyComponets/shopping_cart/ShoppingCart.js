@@ -32,14 +32,18 @@ const ShoppingCart = ({inCartItems,
                         removeCartItems, 
                         fetchCartData,
                         authStatus,
-                        handleModalOpen
+                        handleModalOpen,
+                        setLocalCart,
+                        localCart
                     }) => {
 
     useEffect(() => {
-        fetchCartData();
+
+        authStatus.isAuthenticated && fetchCartData();
+        
     }, [])
 
-    const cart = inCartItems ? inCartItems[0].cartItems : [];
+    const cart = inCartItems ? inCartItems.cartItems : [];
 
 
     // sort the cart items
@@ -59,25 +63,52 @@ const ShoppingCart = ({inCartItems,
         return 0;
     });
 
+    //update qty items in cart
     const changeQtyHandler = (item, productId, action) => {
         let qty = Number(item.quantity);
-        let cartId = inCartItems[0]._id;
-        let numOfItemsInCart = inCartItems[0].cartItems.length;
-        let remainCartItems = inCartItems[0].cartItems.filter(item => item.productId !== productId);
-        
-        if (action === "plus") {
-            updateCartItems(updateQtyToItem(inCartItems[0], item, qty, action, remainCartItems), cartId);
-        } else if (action === "minus" && qty > 1) {
-            updateCartItems(updateQtyToItem(inCartItems[0], item, qty, action, remainCartItems), cartId);
-        } else if (action === "minus" && qty === 1 && numOfItemsInCart === 1) {
-            removeCartItems(cartId);
-        } else if (action === "minus" && qty === 1 && numOfItemsInCart > 1) {
-            updateCartItems(removeItem(inCartItems[0], remainCartItems), cartId);
-        } else if (action === "remove" && numOfItemsInCart > 1) {
-            updateCartItems(removeItem(inCartItems[0], remainCartItems), cartId);
-        } else if (action === "remove" && numOfItemsInCart === 1) {
-            removeCartItems(cartId);
+        let cartId = inCartItems._id;
+        let numOfItemsInCart = inCartItems.cartItems.length;
+        let remainCartItems = inCartItems.cartItems.filter(item => item.productId !== productId);
+
+        //to check if the user is logged in
+        if (authStatus.isAuthenticated) {
+            // logged in user, items storge in server
+            if (action === "plus") {
+                updateCartItems(updateQtyToItem(inCartItems, item, qty, action, remainCartItems, authStatus), cartId);
+            } else if (action === "minus" && qty > 1) {
+                updateCartItems(updateQtyToItem(inCartItems, item, qty, action, remainCartItems, authStatus), cartId);
+            } else if (action === "minus" && qty === 1 && numOfItemsInCart === 1) {
+                removeCartItems(cartId);
+            } else if (action === "minus" && qty === 1 && numOfItemsInCart > 1) {
+                updateCartItems(removeCartItem(inCartItems, remainCartItems, authStatus), cartId);
+            } else if (action === "remove" && numOfItemsInCart > 1) {
+                updateCartItems(removeCartItem(inCartItems, remainCartItems, authStatus), cartId);
+            } else if (action === "remove" && numOfItemsInCart === 1) {
+                removeCartItems(cartId);
+            }
+        } else {
+            // No login, cart items in local storage;
+            if (action === "plus") {
+                let updatedItems = updateQtyToItem(localCart, item, qty, action, remainCartItems, authStatus);
+                localStorage.setItem('cart', JSON.stringify(updatedItems));;
+            } else if (action === "minus" && qty > 1) {
+                let updatedItems = updateQtyToItem(localCart, item, qty, action, remainCartItems, authStatus);
+                localStorage.setItem('cart', JSON.stringify(updatedItems));;
+            } else if (action === "minus" && qty === 1 && numOfItemsInCart === 1) {
+                localStorage.removeItem('cart');
+            } else if (action === "minus" && qty === 1 && numOfItemsInCart > 1) {
+                let updatedItems = removeCartItem(localCart, remainCartItems, authStatus);
+                localStorage.setItem('cart', JSON.stringify(updatedItems));;
+            } else if (action === "remove" && numOfItemsInCart > 1) {
+                let updatedItems = removeCartItem(localCart, remainCartItems, authStatus);
+                localStorage.setItem('cart', JSON.stringify(updatedItems));;
+            } else if (action === "remove" && numOfItemsInCart === 1) {
+                localStorage.removeItem('cart');
+            }
+            let updateCart = JSON.parse(localStorage.getItem('cart')) || [];
+            return setLocalCart(() => updateCart);
         }
+        
     }
 
     const classes = useStyles();
@@ -88,13 +119,13 @@ const ShoppingCart = ({inCartItems,
         <div className="cart-container">
             <div className="top-section">
                 <div className="top-container">
-                    <div className="buttons">
+                    <div className="buttons back-button-order">
                         <Button onClick={() => history.goBack()} variant="outlined" size="middle" className={classes.buttonStyle}>Back</Button>
                     </div>
                     <div className="buttons total">
                         <h1><span>$</span> {inCartItems ? cartTotal : "0.00"} <span>USD</span></h1>
                     </div>
-                    <div className="buttons">
+                    <div className="buttons checkout-button-order">
                         {
                             !authStatus.isAuthenticated ?
                             <Link className="checkout-button"><Button onClick={() => handleModalOpen()} variant="outlined" size="middle" className={classes.buttonStyle}>Check Out</Button></Link> :
@@ -127,8 +158,12 @@ const ShoppingCart = ({inCartItems,
     )
 }
 
-const updateQtyToItem = (cartItems, newItem, qty, action, remainCartItems) => {
+const updateQtyToItem = (cartItems, newItem, qty, action, remainCartItems, auth) => {
     let updatedItem;
+
+    let userId = auth.isAuthenticated ?
+                (JSON.parse(localStorage.getItem('user')) || [])._id :
+                "Not Register User";
 
     action === "plus" ?
     updatedItem = {...newItem, quantity: qty + 1} :
@@ -136,6 +171,7 @@ const updateQtyToItem = (cartItems, newItem, qty, action, remainCartItems) => {
 
     return {
         ...cartItems,
+        userId: userId,
         cartItems: [
             ...remainCartItems,
             {...updatedItem}
@@ -143,10 +179,15 @@ const updateQtyToItem = (cartItems, newItem, qty, action, remainCartItems) => {
     }
 }
 
-const removeItem = (cartItems, remainCartItems) => {
+const removeCartItem = (cartItems, remainCartItems, auth) => {
+
+    let userId = auth.isAuthenticated ?
+                (JSON.parse(localStorage.getItem('user')) || [])._id :
+                "Not Register User";
 
     return {
         ...cartItems,
+        userId: userId,
         cartItems: [
             ...remainCartItems,
         ]

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from 'react-redux';
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {Control, LocalForm, Errors } from 'react-redux-form';
 import { Modal, Backdrop, Fade } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -36,6 +36,7 @@ const SignInModal = ({authStatus,
                         signinRoute, 
                         setSigninRoute, 
                         handleModalClose,
+                        fetchAndUpdateCartItem
                     }) => {
  
     const [auth] = useState(authStatus.isAuthenticated);
@@ -43,37 +44,52 @@ const SignInModal = ({authStatus,
     //Modal
     const classes = useStyles();
 
-    const history = useHistory();
-
-    const handleLogin = (values) => {
+    async function handleLogin(values) {
 
         if (values) {
-            userLogin(values);
-            // getStatus();
-            // checkStatus();
+            await userLogin(values);
+            
             setTimeout(() => {
+                let user = JSON.parse(localStorage.getItem('user')) || [];
+                
                 if (auth) {
-                    console.log(authStatus)
-                    if (authStatus.user !== null) {
-                        authStatus.user.username !== "admin" && handleModalClose();
-                    } else if ( authStatus.errMess === "Error 401: Unauthorized" || 
-                                authStatus.errMess === null ||
-                                authStatus.errMess === "" ||
-                                !auth
-                    ) {
-                        return null;
+                    if (user !== []) {
+                        user.admin === false && handleModalClose();
                     } else {
-                        handleModalClose();
+                        console.log('Error')
                     }
                 }
             }, 3500)
-            // setTimeout(() => {
-            //     signinRoute ? history.push('/') : history.goBack();
-            // }, 3500)
+                
+            fetchAndUpdateCartItem();
         } 
+
+        
+        // if (values) {
+        //     userLogin(values);
+        //     setTimeout(() => {
+        //         let user = JSON.parse(localStorage.getItem('user')) || [];
+                
+        //         if (auth) {
+        //             if (user !== []) {
+        //                 user.admin === false && handleModalClose();
+        //                 fetchAndUpdateCartItem();
+        //             } else if ( authStatus.errMess === "Error 401: Unauthorized" || 
+        //                         authStatus.errMess === null ||
+        //                         authStatus.errMess === "" ||
+        //                         !auth
+        //             ) {
+        //                 return null;
+        //             } else {
+        //                 console.log("not Admin and no error")
+        //                 // handleModalClose();
+        //                 fetchAndUpdateCartItem();
+        //             }
+        //         }
+        //     }, 3500)
+        // } 
     } 
     
-
 
     return(
         <React.Fragment>
@@ -102,7 +118,6 @@ const SignInModal = ({authStatus,
                                   <Control.text model=".username" id="username" name="username"
                                       placeholder="Username"
                                       className="form-control"
-                                    //   onChange={handleUsernameChange}
                                       validators={{
                                           required,
                                           minLength: minLength(3),
@@ -126,7 +141,6 @@ const SignInModal = ({authStatus,
                                   <Control.text model=".password" id="password" name="password"
                                       placeholder="Password"
                                       className="form-control"
-                                    //   onChange={handlePasswordChange}
                                       type="password"
                                       validators={{
                                           required,

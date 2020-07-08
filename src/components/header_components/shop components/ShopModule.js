@@ -30,7 +30,8 @@ const ShopModule = ({cartQty,
                 setSigninRoute,
                 handleModalOpen,
                 handleModalClose,
-                modalOpen
+                modalOpen,
+                fetchAndUpdateCartItem
               }) => {
 
 
@@ -74,6 +75,7 @@ const ShopModule = ({cartQty,
                 signinRoute={signinRoute}
                 setSigninRoute={setSigninRoute}
                 handleModalClose={handleModalClose}
+                fetchAndUpdateCartItem={fetchAndUpdateCartItem}
               />
             </div>
         </React.Fragment>

@@ -19,8 +19,10 @@
   padding-top: 10px;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: (1fr)[3];
-      grid-template-columns: repeat(3, 1fr);
+  -ms-grid-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
+  -ms-grid-rows: 1fr;
+      grid-template-rows: 1fr;
   border-bottom: 1px solid #CFCFCF;
   background-color: #fff;
   z-index: 2;
@@ -43,6 +45,40 @@
 
 .cart-container .top-section .top-container .total {
   top: -2px;
+}
+
+@media screen and (max-width: 600px) {
+  .cart-container .top-section .top-container {
+    padding-top: 5px;
+    -ms-grid-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+    -ms-grid-rows: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+  }
+  .cart-container .top-section .top-container .buttons {
+    top: 0;
+  }
+  .cart-container .top-section .top-container .buttons h1 {
+    position: relative;
+    top: 25px;
+    margin: 0;
+    font-size: 1.8rem;
+  }
+  .cart-container .top-section .top-container .checkout-button-order {
+    -webkit-box-ordinal-group: 2;
+        -ms-flex-order: 1;
+            order: 1;
+  }
+  .cart-container .top-section .top-container .back-button-order {
+    -webkit-box-ordinal-group: 4;
+        -ms-flex-order: 3;
+            order: 3;
+  }
+  .cart-container .top-section .top-container .total {
+    -webkit-box-ordinal-group: 3;
+        -ms-flex-order: 2;
+            order: 2;
+  }
 }
 
 .cart-container .items-container {

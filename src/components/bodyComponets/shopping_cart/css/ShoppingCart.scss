@@ -16,7 +16,8 @@ $bgColor: #CFCFCF;
             top: 100px;
             padding-top: 10px;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr;
             border-bottom: 1px solid $bgColor;
             background-color: #fff;
             z-index: 2;
@@ -34,6 +35,31 @@ $bgColor: #CFCFCF;
             }
             .total {
                 top: -2px;
+            }
+        }
+        @media screen and (max-width: 600px) {
+            .top-container {
+                padding-top: 5px;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+                .buttons {
+                    top: 0;
+                    h1 {
+                        position: relative;
+                        top: 25px;
+                        margin: 0;
+                        font-size: 1.8rem;
+                    }
+                }
+                .checkout-button-order {
+                    order: 1;
+                }
+                .back-button-order {
+                    order: 3;
+                }
+                .total {
+                    order: 2;
+                }
             }
         }
     }

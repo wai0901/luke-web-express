@@ -60,6 +60,7 @@ const Header = (props) => {
                             handleModalOpen={props.handleModalOpen}
                             handleModalClose={props.handleModalClose}
                             modalOpen={props.modalOpen}
+                            fetchAndUpdateCartItem={props.fetchAndUpdateCartItem}
                         />
                     </div> 
                 </div>

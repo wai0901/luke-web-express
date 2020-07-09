@@ -1,9 +1,8 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom'
-import { connect } from 'react-redux';
 import {Control, LocalForm, Errors } from 'react-redux-form';
-import { signupUser } from '../../../redux/ActionCreater';
-import './css/signup.css';
+import { useHistory } from 'react-router-dom'
+
+import './css/addressForm.css';
 
 const required = val => val && val.length;
 const maxLength = len => val => !val || (val.length <= len);
@@ -11,29 +10,19 @@ const minLength = len => val => val && (val.length >= len);
 const isNumber = val => !isNaN(+val);
 const validEmail = val => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
-const mapDispatchToProps = {
-    signupUser: (info) => (signupUser(info)),
-};
 
-
-const Signup = ({setSigninRoute, signupUser}) => {
+const AddressForm = ({formInfo, handleCheckoutInfoChange}) => {
 
     const history = useHistory();
-
-    const handleSubmit = (values) => {
-        alert(`Thank you ${values.firstname} ${values.lastname} for register`)
-        signupUser(values)
-        history.goBack()
-    }
-
+   
     return (
-        <div className="signup-form-container">
+        <div className="address-form-container">
             <div className="card">
                 <div>
-                    <h3>SIGNUP NEW ACCOUNT</h3>
+                    <h3>{formInfo} Information</h3>
                 </div>
                 <div model="contactForm" className="form-container">
-                    <LocalForm onSubmit={values => handleSubmit(values)}>
+                    <LocalForm onSubmit={values => handleCheckoutInfoChange(values, formInfo)}>
                         <div className="form-group">
                             <label htmlFor="firstname" className="label"></label>
                             <Control.text model=".firstname" id="firstname" name="firstname"
@@ -122,7 +111,7 @@ const Signup = ({setSigninRoute, signupUser}) => {
                             <label htmlFor="state" className="label state-and-zip-label"></label>
                             <Control.text model=".state" id="state" name="state"
                                 placeholder="State"
-                                className="form-control state-and-zip state-and-zip-left"
+                                className="state-and-zip state-and-zip-left form-control"
                                 validators={{
                                     required,
                                     minLength: minLength(2)
@@ -140,7 +129,7 @@ const Signup = ({setSigninRoute, signupUser}) => {
                             <label htmlFor="zip" className="label state-and-zip-label"></label>
                             <Control.text model=".zip" id="zip" name="zip"
                                 placeholder="Zip Code"
-                                className="form-control state-and-zip"
+                                className="state-and-zip form-control"
                                 validators={{
                                     required,
                                     minLength: minLength(2),
@@ -186,28 +175,6 @@ const Signup = ({setSigninRoute, signupUser}) => {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="username" className="label"></label>
-                            <Control.text model=".username" id="username" name="username"
-                                placeholder="Username"
-                                className="form-control"
-                                validators={{
-                                    required,
-                                    minLength: minLength(3),
-                                    maxLength: maxLength(15)
-                                }}
-                            />
-                            <Errors
-                                className="text-warning"
-                                model=".username"
-                                show="touched"
-                                component="div"
-                                messages={{
-                                    minLength: 'Must be at least 3 characters',
-                                    maxLength: 'Must be 15 characters or less',
-                                }}
-                            />
-                        </div>
-                        <div className="form-group">
                             <label htmlFor="email" className="label"></label>
                             <Control.text model=".email" id="email" name="email"
                                 placeholder="Email"
@@ -228,45 +195,10 @@ const Signup = ({setSigninRoute, signupUser}) => {
                                 }}
                             />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="password" className="label"></label>
-                            <Control.text model=".password" id="password" name="password"
-                                placeholder="Password"
-                                className="form-control"
-                                type="password"
-                                validators={{
-                                    required,
-                                    minLength: minLength(6),
-                                    maxLength: maxLength(15),
-                                }}
-                            />
-                            <Errors
-                                className="text-warning"
-                                model=".password"
-                                show="touched"
-                                component="div"
-                                messages={{
-                                    minLength: 'Must be at least 6 characters',
-                                    maxLength: 'Must be 15 characters or less',
-                                    
-                                }}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <div className="form-check">
-                                <label  className="check-label">
-                                    <Control.checkbox
-                                        model=".promotion"
-                                        name="promotion"
-                                    /> {' '}
-                                    <p>Receive Promotion News</p>
-                                </label>
-                            </div>
-                        </div>
 
                         <div className="form-group button-group">
-                            <button type="submit" onClick={setSigninRoute(true)} color="primary">
-                                SEND
+                            <button type="submit" color="primary">
+                                UPDATE
                             </button>
                             <button type="button" onClick={() => history.goBack()} color="primary">
                                 BACK
@@ -279,4 +211,4 @@ const Signup = ({setSigninRoute, signupUser}) => {
     )
 }
 
-export default (connect(null, mapDispatchToProps)(Signup));
+export default AddressForm;

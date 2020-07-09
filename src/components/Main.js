@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, withRouter } from "react-router-dom";
+import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux';
 import Header from "./header_components/Header";
 import Footer from "./footer components/Footer";
@@ -9,6 +10,7 @@ import Items from './bodyComponets/SelectedCat/product_Items/Items';
 import ItemDetail from './bodyComponets/SelectedCat/product_Items/ItemDetail';
 import ShoppingCart from './bodyComponets/shopping_cart/ShoppingCart';
 import Checkout from './bodyComponets/shopping_cart/checkout/Checkout';
+import AddressForm from './bodyComponets/shopping_cart/checkout/address-form/AddressForm';
 import Help from './bodyComponets/help/Help';
 import Contact from './bodyComponets/contact/Contact';
 import Signup from './bodyComponets/login/Signup';
@@ -27,13 +29,10 @@ import {WEBSITEDATA} from '../shared/websiteData'
 
 
 const mapStateToProps = state => {
-    console.log(state.cartItem)
+    // console.log(state.cartItem)
     return {
-        itemsData: state.items.items.data,
         inCartItems: state.cartItem.cart,
         authStatus: state.auth,
-        catIsLoading: state.category.isLoading,
-        itemsDataLoading: state.items.isLoading,
         inCartItemsLoading: state.cartItem.isLoading,
         authLoading: state.auth.isLoading
     }
@@ -65,7 +64,6 @@ const Main = (props) => {
     // add item to local storage for shopping cart if user is not authenticated
     const [ localCart, setLocalCart ] = useState([]);
 
-
     useEffect(() => {
 
         //fetch the cart item from server
@@ -77,7 +75,7 @@ const Main = (props) => {
 
     }, [])
 
-
+    const history = useHistory();
     const mainData = WEBSITEDATA.homeMenu;
     const authStatus =  props.authStatus;
     const catIsLoading = props.catIsLoading;
@@ -171,24 +169,25 @@ const Main = (props) => {
     /*After login, check if the server has exsiting items in cart,
       if yes, then merge the items in the local storage and update to the server*/
     const fetchAndUpdateCartItem = async () => {
-        let localItems = JSON.parse(localStorage.getItem('cart')) || [];
-        let serverItems = JSON.parse(localStorage.getItem('serverItems')) || [];
-        let user = JSON.parse(localStorage.getItem('user')) || [];
-
+        let localItems = await JSON.parse(localStorage.getItem('cart')) || [];
+        let server = await (JSON.parse(localStorage.getItem('serverItems'))) || [];
+        let serverItems = server.length !== 0 && server ? (JSON.parse(localStorage.getItem('serverItems')))[0] : [];
+        let user = await JSON.parse(localStorage.getItem('user')) || [];
+        
         // check if the user has successfully loggin in
         if (user !== []) {
-            
+            console.log("logged in")
             //check if the cart in server is empty
-            if (serverItems.length === 0) {
-                
+            if (serverItems.length === 0 ) {
+                console.log("server has no item")
                 //check if the cart in local storage is empty, if not push it to server
                 localItems !== [] && props.postCartItems(localItems);
                 
             } else {
-                
+                console.log("server has items")
                 //check if the cart in local storage is empty, if not merge with existing items
                 if (localItems.length !== 0) {
-                    
+                    console.log("local has item")
                     //find the same cart items in serverside and localside and update the qty
                     let mergedCartItems = await findSameObjects(serverItems.cartItems, localItems.cartItems)
                                     .map(serverItem => {
@@ -221,6 +220,38 @@ const Main = (props) => {
                 }
             }
         }
+    }
+
+    //for billing info and delivery info in checkout
+    const handleCheckoutInfoChange = (info, form) => {
+        const user = JSON.parse(localStorage.getItem('user')) || []
+
+        const userInformation = {
+            firstname: info.firstname,
+            lastname: info.lastname,
+            email: info.email,
+            tel: info.tel,
+            street: info.street,
+            city: info.city,
+            state: info.state,
+            zip: info.zip
+        }
+
+        //check if the form is billing, else is delivery
+        if (form === "billing") {
+            let billing = {
+                ...user,
+                billingAddress: userInformation
+            }
+            localStorage.setItem('user', JSON.stringify(billing));
+        } else {
+            let delivery = {
+                ...user,
+                deliveryAddress: userInformation
+            }
+            localStorage.setItem('user', JSON.stringify(delivery));
+        }
+        history.goBack()
     }
 
     //Menu 
@@ -268,6 +299,17 @@ const Main = (props) => {
         )
     }
 
+    // AddressForm page 
+    const RenderAddressForm = ({match}) => {
+
+        return (
+            <AddressForm 
+                formInfo={match.params.formId}
+                handleCheckoutInfoChange={handleCheckoutInfoChange}
+            />
+        )
+    }
+
     //toggle the signin modal
     const handleModalOpen = () => {
       setModalOpen(true);
@@ -295,7 +337,6 @@ const Main = (props) => {
                         authStatus={authStatus}
                         cartQty={cartQty}
                         handleHeaderCatChange={handleHeaderCatChange}
-                        authStatus={authStatus}
                         signinRoute={signinRoute}
                         setSigninRoute={setSigninRoute}
                         handleModalOpen={handleModalOpen}
@@ -331,8 +372,10 @@ const Main = (props) => {
                                 inCartItems={inCartItems}
                                 cartTotal={cartTotal}
                                 authStatus={authStatus}
+                                handleCheckoutInfoChange={handleCheckoutInfoChange}
                             />
                         } />
+                        <Route path="/checkout/:formId" exact component={RenderAddressForm} /> 
                         <Route path="/shopping-cart" exact render={() => 
                             <ShoppingCart 
                                 inCartItems={inCartItems}
@@ -437,6 +480,16 @@ const addCartItem = (inCartItems, newItem, size, qty, auth) => {
         ]
         };
     }
+}
+
+//format the phonenumber
+function formatPhoneNumber(phoneNumberString) {
+    var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+    var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+    if (match) {
+      return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+    }
+    return null
 }
 
 //find the same objects in two arrays of objests

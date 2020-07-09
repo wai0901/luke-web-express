@@ -1,6 +1,6 @@
 $linkColor: #444;
 $hoverColor: #eb4559;
-
+$containerColor: #E5E5E5;
 
 .contact-container {
     width: 100%;
@@ -102,13 +102,6 @@ $hoverColor: #eb4559;
     .contact-container {
         .contact-cards-container {
             width: 80%;
-        }
-    }
-};
-@media screen and (max-width: 700px) {
-    .contact-container {
-        .contact-cards-container {
-            width: 100%;
         }
     }
 };

@@ -11,6 +11,11 @@ import './css/Footer.css';
 
 function Footer() {
 
+    const handleNewsLetter = () => {
+        alert("Thank you for subscription, newsletter will email to you.");
+        return false;
+    }
+
     return(
         <div className="footer-container">
             <ul className="footer-links">
@@ -24,7 +29,7 @@ function Footer() {
             </div>  
             <div className="newsletter">
                 <div>
-                    <form  noValidate autoComplete="off">
+                    <form  autoComplete="off" onSubmit={() => handleNewsLetter()}>
                         <TextField 
                             id="standard-basic"
                             label="e-mail" 

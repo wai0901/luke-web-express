@@ -37,11 +37,11 @@ const ShoppingCart = ({inCartItems,
                         localCart
                     }) => {
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        authStatus.isAuthenticated && fetchCartData();
+    //     authStatus.isAuthenticated && fetchCartData();
         
-    }, [])
+    // }, [])
 
     const cart = inCartItems ? inCartItems.cartItems : [];
 

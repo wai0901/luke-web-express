@@ -2,6 +2,7 @@ $linkColor: #444;
 $hoverColor: #eb4559;
 $warningMessage: #eb4559;
 $successMessage: #299114;
+$bgColor: #CFCFCF;
 $containerColor: #E5E5E5;
 
 $width: 15px;
@@ -9,14 +10,14 @@ $height: 15px;
 
 $bounce_height: 30px;
 
-.signup-form-container {
+.address-form-container {
     width: 100%;
     min-width: 330px;
     min-height: 705px;
     background-color: #eee;
     .card {
         position: relative;
-        top: 30px;
+        top: 20px;
         margin: 0 auto;
         padding: 0 15px;
         width: 100%;
@@ -126,6 +127,7 @@ $bounce_height: 30px;
         }
         
     }
+    
     .login-card {
         max-width: 250px;
         text-align: center;
@@ -140,9 +142,8 @@ $bounce_height: 30px;
         }
     }
 }
-
 @media screen and (max-width: 500px) {
-    .signup-container {
+    .address-container {
         background-color: $containerColor;
         .card {
             padding: 0;
@@ -156,3 +157,4 @@ $bounce_height: 30px;
         }
     }
 }
+

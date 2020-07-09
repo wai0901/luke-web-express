@@ -3,117 +3,6 @@ import axios from 'axios';
 import { baseUrl } from '../shared/baseUrl';
 
 
-// Fetch Data from server
-// export const fetchMainData = () => dispatch => {
-//     dispatch(mainDataLoading());
-
-//     const bearer = 'Bearer ' + localStorage.getItem('token');
-
-//     return fetch(baseUrl + 'main', {
-//         headers: {
-//             'Authorization': bearer
-//         },
-//     })
-//     .then(response => {
-//             if (response.ok) {
-//                 console.log(response)
-//                 return response;
-//             } else {
-//                 const error = new Error(`Error ${response.status}: ${response.statusText}`);
-//                 error.response = response;
-//                 throw error;
-//             }
-//         },
-//         error => { throw error; }
-//     )
-//     .then(response => response.json())
-//     .then(response => dispatch(addMainData(response)))
-//     .catch(error => dispatch(mainFailed(error.message)));
-// }
-
-
-// Fetch Data from server
-export const fetchMainData = () => async dispatch => {
-    dispatch(mainDataLoading());
-
-    try {
-        const response = await axios.get(baseUrl + 'main');
-        dispatch(addMainData(response));
-    }
-    catch (error) {
-        dispatch(mainFailed(error));
-    }
-};
-
-export const mainDataLoading = () => ({
-    type: ActionTypes.FETCH_MAIN_LOADING,
-});
-
-export const mainFailed = errMess => ({
-    type: ActionTypes.FETCH_MAIN_FAILED,
-    payload: errMess
-});
-
-export const addMainData = (mainData) => ({
-    type: ActionTypes.FETCH_MAIN_DATA,
-    payload: mainData
-});
-
-//Fetch select category Id from menu
-export const fetchCategoryData = (link) => async dispatch => {
-    dispatch(categoryDataLoading());
-
-    try {
-        const response = await axios.get(baseUrl + 'main/' + link);
-        dispatch(addCategoryData(response));
-    }
-    catch (error) {
-        dispatch(categoryFailed(error));
-    }
-}
-
-export const categoryFailed = errMess => ({
-    type: ActionTypes.FETCH_CATEGORY_FAILED,
-    payload: errMess
-});
-
-export const addCategoryData = (categoryData) => ({
-    type: ActionTypes.FETCH_CATEGORY_DATA,
-    payload: categoryData
-});
-
-export const categoryDataLoading = () => ({
-    type: ActionTypes.FETCH_CATEGORY_LOADING,
-});
-
-
-//Fetch Items by the "link" from Category Component
-export const fetchItemsData = (link, categoryId) => async dispatch => {
-    dispatch(ItemsDataLoading());
-
-    try {
-        const response = await axios.get(baseUrl + 'main/' + categoryId + '/' + link);
-        dispatch(addItemsData(response));
-    }
-    catch (error) {
-        dispatch(ItemsFailed(error));
-    }
-}
-
-export const ItemsFailed = errMess => ({
-    type: ActionTypes.FETCH_ITEMS_FAILED,
-    payload: errMess
-});
-
-export const addItemsData = (response) => ({
-    type: ActionTypes.FETCH_ITEMS_DATA,
-    payload: response
-});
-
-export const ItemsDataLoading = () => ({
-    type: ActionTypes.FETCH_ITEMS_LOADING,
-});
-
 
 //Post to Server
 export const postCartItems = (cartItem) => dispatch => {
@@ -237,7 +126,7 @@ export const fetchCartData = () => dispatch => {
     .then(response => {
         dispatch(addCartData(response));
     })
-    .catch(error => dispatch(ItemsFailed(error.message)));
+    .catch(error => dispatch(cartFailed(error.message)));
 }
 
 export const cartFailed = errMess => ({
@@ -415,9 +304,9 @@ export const logoutUser = () => (dispatch) => {
     localStorage.removeItem('token');
     localStorage.removeItem('creds');
     localStorage.removeItem('user');
+    localStorage.removeItem('cart');
     localStorage.removeItem('serverItems');
     alert('Your are logged out, come again!!');
-    // dispatch(favoritesFailed("Error 401: Unauthorized"));
     dispatch(receiveLogout())
 }
 
@@ -512,3 +401,49 @@ export const fetchUsersDataLoading = () => ({
 });
 
 
+//Post contact us
+export const postContactUs = (data) => dispatch => {
+    dispatch(contactLoading());
+
+    const bearer = 'Bearer ' + localStorage.getItem('token');
+
+    return fetch(baseUrl + 'contacts', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': bearer
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+            if (response.ok) {
+                return response;
+            } else {
+                const error = new Error(`Error ${response.status}: ${response.statusText}`);
+                error.response = response;
+                throw error;
+            }
+        },
+        error => { throw error }
+    )
+    .then(response => response.json())
+    .then(response => console.log(response))
+    .catch(error => { 
+        dispatch(contactFailed(error));
+    });
+};
+
+export const contactFailed = errMess => ({
+    type: ActionTypes.CONTACT_FAILED,
+    payload: errMess
+});
+
+export const addContactData = (response) => ({
+    type: ActionTypes.ADD_CONTACT_DATA,
+    payload: response
+});
+
+export const contactLoading = () => ({
+    type: ActionTypes.CONTACT_LOADING,
+});

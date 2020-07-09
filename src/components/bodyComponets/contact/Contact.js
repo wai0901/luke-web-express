@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {Control, LocalForm, Errors } from 'react-redux-form';
+import { useHistory } from 'react-router-dom'
+import { postContactUs } from '../../../redux/ActionCreater';
 import './css/contact.css';
 
 const required = val => val && val.length;
@@ -9,16 +11,21 @@ const minLength = len => val => val && (val.length >= len);
 const isNumber = val => !isNaN(+val);
 const validEmail = val => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
-const mapStateToProps = state => {
-    
+const mapDispatchToProps = {
+    postContactUs: (data) => (postContactUs(data))
   }
 
-const Contact = () => {
+const Contact = (props) => {
+
+    const history = useHistory();
 
     const handleSubmit = (values) => {
-        console.log(values)
-        alert(`Name: ${values.firstName} ${values.lastName} \nTel: ${values.phoneNum} \nEmail: ${values.email}\nMay we contact you? ${true ? 'Agree' : 'Disagree'}\nContact method: \nComment: ${values.feedback}`)
-
+        if (values) {
+            props.postContactUs(values);
+            alert(`Name: ${values.firstName} ${values.lastName} \nTel: ${values.phoneNum} \nEmail: ${values.email}\nMay we contact you? ${true ? 'Agree' : 'Disagree'}\nContact method: \nComment: ${values.feedback}`)
+            history.goBack();
+        }
+        
     }
 
     return (
@@ -136,17 +143,12 @@ const Contact = () => {
                                 <div className="form-check">
                                     <label  className="check-label">
                                         <Control.checkbox
-                                            model=".agree"
-                                            name="agree"
+                                            model=".contactMe"
+                                            name="contactMe"
                                         /> {' '}
                                         <p>May we contact you?</p>
                                     </label>
                                 </div>
-                                <Control.select model=".contactType" name="contactType"
-                                    className="form-control check">
-                                    <option>By Phone</option>
-                                    <option>By Email</option>
-                                </Control.select>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="feedback" className="label">Comment</label>
@@ -164,16 +166,8 @@ const Contact = () => {
                     </div>    
                 </div>
             </div>
-            {/* <div className="loading-container">
-                {props.contactLoading && 
-                  <div>
-                    <div class="bounceball"></div>
-                    <p className="text">LOADING...(Stimulating fatch data Demo)</p>
-                  </div>
-                }
-            </div>  */}
         </div>
     )
 }
 
-export default connect(mapStateToProps)(Contact);
+export default connect(null, mapDispatchToProps)(Contact);

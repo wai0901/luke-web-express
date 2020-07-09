@@ -73,18 +73,26 @@ $editInfoLink: rgb(223, 65, 65);
                 margin: 5px auto 0;
                 .contact-info {
                     height: 190px;
-                    margin: 5px 10px 10px 10px;
+                    margin: 5px 5px 10px 5px;
                     background-color: #fff;
                     border-radius: 10px;
                     div {
                         @include margin-padding-zero;
                         position: relative;
-                        left: 20px;
+                        left: 10px;
                     }
                     p {
                         @include margin-padding-zero;
                         font-size: 0.9rem;
                         margin: 5px 0;
+                    }
+                    .address-container {
+                        left: 0px;
+                        padding-top: 3px;
+                        .address {
+                            font-size: 0.8rem;
+                            line-height: 0.8rem;
+                        }
                     }
                     h6 {
                         font-size: 1.1rem;

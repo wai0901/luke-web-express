@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { checkoutOrder, removeCartItems } from '../../../../redux/ActionCreater';
 import { v4 as uuidv4 } from 'uuid';
 import CC from './credit-card/CreditCard';
@@ -12,7 +12,13 @@ const mapDispatchToProps = {
     removeCartItems: (id) => (removeCartItems(id))
 }
 
-const Checkout= ({inCartItems, cartTotal, checkoutOrder, authStatus, removeCartItems}) => {
+const Checkout= ({inCartItems, 
+                    cartTotal, 
+                    checkoutOrder, 
+                    authStatus, 
+                    removeCartItems,
+                }) => {
+
 
     let tax = (cartTotal * 0.09).toFixed(2);
     let deliveryFee = cartTotal? 4.99: 0;
@@ -20,12 +26,13 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, authStatus, removeCartI
 
     const history = useHistory();
     const checkoutItems = inCartItems ? inCartItems.cartItems : [];
+    const user = JSON.parse(localStorage.getItem('user')) || []
+    const deliveryInfo = user === [] ? [] : user.deliveryAddress;
+    const billingInfo = user === [] ? [] : user.billingAddress;
 
     const handleOrderSubmit = (e) => {
         e.preventDefault();
-        let userId = authStatus.isAuthenticated ?
-                (JSON.parse(localStorage.getItem('user')) || [])._id :
-                "Not Register User";
+        let userId = user === [] ? "Not Register User" : user._id;
 
         let orders = checkoutItems.map(item => {
             return {
@@ -39,6 +46,8 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, authStatus, removeCartI
         })
         let finalOrder = {
             userId: userId,
+            billingAddress: billingInfo,
+            deliveryAddress: deliveryInfo,
             orders: orders,
             orderTotal: cartTotal
         }
@@ -46,50 +55,11 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, authStatus, removeCartI
         checkoutOrder(finalOrder);
         history.push('thankyou');
         removeCartItems(inCartItems._id);
+        localStorage.removeItem('serverItems');
         setTimeout(() => {
             history.push('/');
                 }, 5000);
     }
-    
-    
-    // console.log(customerInfo)
-    const [ customerInfo, setCustomerInfo ] = useState(
-        JSON.parse(localStorage.getItem('user')) || []
-    )
-
-
-    //temp
-    const handleCustomerInfoChange = (info) => {
-        setCustomerInfo(prevInfo => ({
-            ...prevInfo,
-            firstname: info
-        }))
-        return localStorage.setItem('user', JSON.stringify({
-            _id: customerInfo._id,
-            lastname: customerInfo.lastname,
-            firstname: info,
-            address: {
-                street: customerInfo.address.street,
-                city: customerInfo.address.city,
-                state: customerInfo.address.state,
-                zip: customerInfo.address.zip
-            },
-            tel: formatPhoneNumber(Number(customerInfo.tel)),
-            username: customerInfo.username,
-            email: customerInfo.email
-        }));
-    }
-    
-
-    //format the phonenumber
-    function formatPhoneNumber(phoneNumberString) {
-        var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
-        var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
-        if (match) {
-          return '(' + match[1] + ') ' + match[2] + '-' + match[3]
-        }
-        return null
-      }
 
     return (
         <div className="checkout-container">
@@ -157,14 +127,16 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, authStatus, removeCartI
                                 <h6>Billing Info</h6>
                             </div>
                             <div>
-                                <p>{customerInfo.firstname} {customerInfo.lastname}</p>
-                                <p>{customerInfo.email}</p>
-                                <p>{customerInfo.tel}</p>
-                                <p>{customerInfo.address.street},</p>
-                                <p>{customerInfo.address.city}, {customerInfo.address.state} {customerInfo.address.zip}</p>
+                                <p>{billingInfo.firstname} {billingInfo.lastname}</p>
+                                <p>{billingInfo.email}</p>
+                                <p>{formatPhoneNumber(billingInfo.tel)}</p>
+                                <div className="address-container">
+                                    <p className="address">{billingInfo.street},</p>
+                                    <p className="address">{billingInfo.city}, {billingInfo.state} {billingInfo.zip}</p>
+                                </div>
                             </div>
                             <div className="edit-info-share">
-                                <button href="" onClick={() => handleCustomerInfoChange("May")}>Edit</button>
+                                <Link to={"/checkout/billing"}><button>Edit</button></Link>
                             </div>
                         </div>
                         <div className="contact-info">
@@ -172,14 +144,16 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, authStatus, removeCartI
                                 <h6>Delivery Info</h6>
                             </div>
                             <div>
-                                <p>{customerInfo.firstname} {customerInfo.lastname}</p>
-                                <p>{customerInfo.email}</p>
-                                <p>{customerInfo.tel}</p>
-                                <p>{customerInfo.address.street},</p>
-                                <p>{customerInfo.address.city}, {customerInfo.address.state} {customerInfo.address.zip}</p>
+                                <p>{deliveryInfo.firstname} {deliveryInfo.lastname}</p>
+                                <p>{deliveryInfo.email}</p>
+                                <p>{formatPhoneNumber(deliveryInfo.tel)}</p>
+                                <div className="address-container">
+                                    <p className="address">{deliveryInfo.street},</p>
+                                    <p className="address">{deliveryInfo.city}, {deliveryInfo.state} {deliveryInfo.zip}</p>
+                                </div>
                             </div>
                             <div className="edit-info-share">
-                                <a href="editDeliveryInfo">Edit</a>
+                            <Link to={"/checkout/delivery"}><button>Edit</button></Link>
                             </div>
                         </div>                                
                     </div>
@@ -192,6 +166,16 @@ const Checkout= ({inCartItems, cartTotal, checkoutOrder, authStatus, removeCartI
             </div>
         </div>
     )
+}
+
+//format the phonenumber
+function formatPhoneNumber(phoneNumberString) {
+    var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+    var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+    if (match) {
+      return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+    }
+    return null
 }
 
 export default connect(null, mapDispatchToProps)(Checkout);

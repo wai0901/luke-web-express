@@ -1,13 +1,13 @@
-.signup-form-container {
+.address-form-container {
   width: 100%;
   min-width: 330px;
   min-height: 705px;
   background-color: #eee;
 }
 
-.signup-form-container .card {
+.address-form-container .card {
   position: relative;
-  top: 30px;
+  top: 20px;
   margin: 0 auto;
   padding: 0 15px;
   width: 100%;
@@ -15,26 +15,26 @@
   max-width: 400px;
 }
 
-.signup-form-container .card h3 {
+.address-form-container .card h3 {
   text-transform: uppercase;
 }
 
-.signup-form-container .card p, .signup-form-container .card a {
+.address-form-container .card p, .address-form-container .card a {
   margin: 20px 0;
   line-height: 1.5rem;
   text-decoration: none;
   color: #000;
 }
 
-.signup-form-container .card .form-container {
+.address-form-container .card .form-container {
   width: 100%;
 }
 
-.signup-form-container .card .form-container .form-group {
+.address-form-container .card .form-container .form-group {
   margin: 15px 0;
 }
 
-.signup-form-container .card .form-container .form-group .label, .signup-form-container .card .form-container .form-group .form-control {
+.address-form-container .card .form-container .form-group .label, .address-form-container .card .form-container .form-group .form-control {
   display: block;
   margin: 0 0 2px 0;
   border-radius: 5px;
@@ -43,44 +43,44 @@
   border: none;
 }
 
-.signup-form-container .card .form-container .form-group .label {
+.address-form-container .card .form-container .form-group .label {
   font-size: 0.9rem;
 }
 
-.signup-form-container .card .form-container .form-group .form-control {
+.address-form-container .card .form-container .form-group .form-control {
   width: 100%;
   max-width: 400px;
   margin-top: 5px;
   padding: 10px 0 10px 10px;
 }
 
-.signup-form-container .card .form-container .form-group .check {
+.address-form-container .card .form-container .form-group .check {
   margin: 0 0 20px;
   color: #444;
 }
 
-.signup-form-container .card .form-container .form-group .text-warning {
+.address-form-container .card .form-container .form-group .text-warning {
   margin-top: 5px;
   color: #eb4559;
   font-size: 0.8rem;
   line-height: 1rem;
 }
 
-.signup-form-container .card .form-container .form-group .check-label {
+.address-form-container .card .form-container .form-group .check-label {
   margin-top: 20px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.signup-form-container .card .form-container .form-group .check-label p {
+.address-form-container .card .form-container .form-group .check-label p {
   position: relative;
   top: -2px;
   margin: 0 0 2px 3px;
   font-size: 0.9rem;
 }
 
-.signup-form-container .card .form-container .state-and-zip-container {
+.address-form-container .card .form-container .state-and-zip-container {
   width: 100%;
   max-width: 410px;
   display: -webkit-box;
@@ -94,28 +94,28 @@
   margin: 0;
 }
 
-.signup-form-container .card .form-container .state-and-zip-container .state-and-zip-label {
+.address-form-container .card .form-container .state-and-zip-container .state-and-zip-label {
   margin: 0;
   padding: 0;
   width: 0;
 }
 
-.signup-form-container .card .form-container .state-and-zip-container .state-and-zip {
+.address-form-container .card .form-container .state-and-zip-container .state-and-zip {
   width: 30%;
   max-width: 400px;
   padding-left: 10px;
 }
 
-.signup-form-container .card .form-container .state-and-zip-container .state-and-zip-left {
+.address-form-container .card .form-container .state-and-zip-container .state-and-zip-left {
   margin-right: 10%;
 }
 
-.signup-form-container .card .form-container .button-group {
+.address-form-container .card .form-container .button-group {
   margin-top: 20px;
   text-align: center;
 }
 
-.signup-form-container .card .form-container .button-group button {
+.address-form-container .card .form-container .button-group button {
   width: 130px;
   margin: 10px 30px;
   padding: 10px 0;
@@ -127,23 +127,23 @@
   transition: 0.1s ease-in-out;
 }
 
-.signup-form-container .card .form-container .button-group button:hover {
+.address-form-container .card .form-container .button-group button:hover {
   color: #fff;
   background-color: #eb4559;
   border: 2px solid #eb4559;
 }
 
-.signup-form-container .card .form-container .signup-container {
+.address-form-container .card .form-container .signup-container {
   margin: 20px 0;
 }
 
-.signup-form-container .card .form-container .signup-container .signup {
+.address-form-container .card .form-container .signup-container .signup {
   color: #444;
   list-style: none;
   font-size: 0.9rem;
 }
 
-.signup-form-container .login-card {
+.address-form-container .login-card {
   max-width: 250px;
   text-align: center;
   padding: 20px 50px;
@@ -151,19 +151,19 @@
   border: 1px solid #dddddd;
 }
 
-.signup-form-container .login-card .login-container .signup:hover {
+.address-form-container .login-card .login-container .signup:hover {
   color: #b4b4b4;
 }
 
 @media screen and (max-width: 500px) {
-  .signup-container {
+  .address-container {
     background-color: #E5E5E5;
   }
-  .signup-container .card {
+  .address-container .card {
     padding: 0;
   }
-  .signup-container .card .form-container .button-group button {
+  .address-container .card .form-container .button-group button {
     margin: 10px 10px;
   }
 }
-/*# sourceMappingURL=signup.css.map */
+/*# sourceMappingURL=addressForm.css.map */

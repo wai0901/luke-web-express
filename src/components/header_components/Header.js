@@ -54,7 +54,6 @@ const Header = (props) => {
                         <ShopModule 
                             cartQty={props.cartQty}
                             authStatus={props.authStatus}
-                            authStatus={props.authStatus}
                             signinRoute={props.signinRoute}
                             setSigninRoute={props.setSigninRoute}
                             handleModalOpen={props.handleModalOpen}

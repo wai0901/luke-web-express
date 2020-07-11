@@ -15,14 +15,14 @@ import './css/CheckOutItem.css';
         },
     }));
 
-function CheckOutItem({item, changeQtyHandler, keyId}) {
+function CheckOutItem({item, changeQtyHandler}) {
     
     const classes = useStyles();
     const itemImage = {
         background: `url('${item.images[0]}') no-repeat center ${item.position} / cover`
     }  
 
-    return <li className="item-container" key={keyId}>
+    return <li className="item-container" key={item.productId}>
             <div key={item.id} className="item-image" style={itemImage}></div>
             <div className="item-info">
                 <div className="info-group">
@@ -41,8 +41,8 @@ function CheckOutItem({item, changeQtyHandler, keyId}) {
                             </ButtonGroup>
                         </div>
                         <div>
-                            <IconButton aria-label="delete" className={classes.margin}>
-                                <DeleteIcon onClick={() => changeQtyHandler(item, item.productId, "remove")} fontSize="small" />
+                            <IconButton onClick={() => changeQtyHandler(item, item.productId, "remove")} aria-label="delete" className={classes.margin}>
+                                <DeleteIcon fontSize="small" />
                             </IconButton>
                         </div>
                     </div>

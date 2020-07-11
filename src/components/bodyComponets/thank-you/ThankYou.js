@@ -10,7 +10,7 @@ const ThankYou = () => {
         <div className="thank-you-container">
             <div className="cards-container">
                 <h2>thank you for shopping</h2>
-                <div class="element">
+                <div className="element">
                     <div>
                     <p>....</p>
                     <LocalShippingIcon style={{ fontSize: 100 }}>Filled</LocalShippingIcon>

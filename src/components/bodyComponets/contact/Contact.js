@@ -38,8 +38,8 @@ const Contact = (props) => {
                         Los Angeles, CA 90001<br />
                         U.S.A.
                     </p>
-                    <a href="#"> 1-234-555-1234</a><br />
-                    <a href="#"> wai@portfolio.com</a>
+                    <p> 1-234-555-1234<br />
+                        wai@portfolio.com</p>
                 </div>
                 <div className="card">
                     <div>

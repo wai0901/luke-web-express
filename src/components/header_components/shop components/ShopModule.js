@@ -74,7 +74,6 @@ const ShopModule = ({cartQty,
                 open={modalOpen}
                 signinRoute={signinRoute}
                 setSigninRoute={setSigninRoute}
-                handleModalClose={handleModalClose}
                 fetchAndUpdateCartItem={fetchAndUpdateCartItem}
               />
             </div>

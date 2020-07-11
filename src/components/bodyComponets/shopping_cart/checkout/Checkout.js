@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory, Link } from "react-router-dom";
 import { checkoutOrder, removeCartItems } from '../../../../redux/ActionCreater';
 import { v4 as uuidv4 } from 'uuid';
 import CC from './credit-card/CreditCard';
+import { formatPhoneNumber } from '../../../../shared/shareFunctions';
 import './css/checkout.css';
 
 
@@ -166,16 +167,6 @@ const Checkout= ({inCartItems,
             </div>
         </div>
     )
-}
-
-//format the phonenumber
-function formatPhoneNumber(phoneNumberString) {
-    var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
-    var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
-    if (match) {
-      return '(' + match[1] + ') ' + match[2] + '-' + match[3]
-    }
-    return null
 }
 
 export default connect(null, mapDispatchToProps)(Checkout);

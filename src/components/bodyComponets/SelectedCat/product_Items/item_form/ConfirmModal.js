@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
         minWidth: '120px',
         maxWidth: '120px',
         margin: theme.spacing(2),
-        margin: '20px'
     },
 }));
 

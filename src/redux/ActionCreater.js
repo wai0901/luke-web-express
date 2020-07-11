@@ -1,5 +1,4 @@
 import * as ActionTypes from './ActionTypes';
-import axios from 'axios';
 import { baseUrl } from '../shared/baseUrl';
 
 
@@ -237,7 +236,6 @@ export const userLogin = creds => async dispatch => {
             if (response.ok) {
                 return response;
             } else {
-                console.log(response)
                 const error = new Error(`Error ${response.status}: ${response.statusText}`);
                 error.response = response;
                 throw error;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom'
 import { Button } from '@material-ui/core';
@@ -120,7 +120,7 @@ const ShoppingCart = ({inCartItems,
             <div className="top-section">
                 <div className="top-container">
                     <div className="buttons back-button-order">
-                        <Button onClick={() => history.goBack()} variant="outlined" size="middle" className={classes.buttonStyle}>Back</Button>
+                        <Button onClick={() => history.goBack()} variant="outlined" size="medium" className={classes.buttonStyle}>Back</Button>
                     </div>
                     <div className="buttons total">
                         <h1><span>$</span> {inCartItems ? cartTotal : "0.00"} <span>USD</span></h1>
@@ -129,7 +129,7 @@ const ShoppingCart = ({inCartItems,
                         {
                             !authStatus.isAuthenticated ?
                             <Link className="checkout-button"><Button onClick={() => handleModalOpen()} variant="outlined" size="middle" className={classes.buttonStyle}>Check Out</Button></Link> :
-                            <Link to={"/checkout"} className="checkout-button"><Button variant="outlined" size="middle" className={classes.buttonStyle}>Check Out</Button></Link>
+                            <Link to={"/checkout"} className="checkout-button"><Button variant="outlined" size="medium" className={classes.buttonStyle}>Check Out</Button></Link>
                         }
                     </div>
                 </div>
@@ -142,7 +142,7 @@ const ShoppingCart = ({inCartItems,
                             <CheckOutItem 
                                 item={item}
                                 changeQtyHandler={changeQtyHandler}
-                                keyId={uuidv4()}
+                                key={uuidv4()}
                             />)
                     }
                 </ul>

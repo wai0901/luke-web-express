@@ -17,6 +17,13 @@ import Signup from './bodyComponets/login/Signup';
 import ThankYou from './bodyComponets/thank-you/ThankYou';
 import Loading from './loading/Loading';
 import Admin from './admin/Admin';
+import { findCartItem, 
+    sameItemInCart, 
+    updateItemInCart, 
+    addCartItem, 
+    findSameObjects, 
+    findDifferetObjects 
+} from '../shared/shareFunctions';
 import { 
     postCartItems, 
     updateCartItems, 
@@ -64,16 +71,9 @@ const Main = (props) => {
     // add item to local storage for shopping cart if user is not authenticated
     const [ localCart, setLocalCart ] = useState([]);
 
-    useEffect(() => {
+    //login status
+    const [ loginStatus ] = useState(props.authStatus)
 
-        //fetch the cart item from server
-        authStatus.isAuthenticated && props.fetchCartData();
-
-        //get the cart item data from local storage if user is not logged in
-        const loaclcartItem = JSON.parse(localStorage.getItem('cart')) || [];
-        loaclcartItem && setLocalCart(() => loaclcartItem);
-
-    }, [])
 
     const history = useHistory();
     const mainData = WEBSITEDATA.homeMenu;
@@ -85,8 +85,19 @@ const Main = (props) => {
     const inCartItems = authStatus.isAuthenticated ?
                         props.inCartItems === [] ? [] : props.inCartItems[0] :
                         localCart;
-                    
-    
+    const fetchCartData = props.fetchCartData;
+            
+    useEffect(() => {
+
+        //fetch the cart item from server
+        loginStatus.isAuthenticated && fetchCartData();
+
+        //get the cart item data from local storage if user is not logged in
+        const loaclcartItem = JSON.parse(localStorage.getItem('cart')) || [];
+        loaclcartItem && setLocalCart(() => loaclcartItem);
+
+    }, [loginStatus, fetchCartData])
+
     //for Category 
     const handleCatChange = (link) =>{ 
         const data = WEBSITEDATA[link]
@@ -170,9 +181,11 @@ const Main = (props) => {
       if yes, then merge the items in the local storage and update to the server*/
     const fetchAndUpdateCartItem = async () => {
         let localItems = await JSON.parse(localStorage.getItem('cart')) || [];
-        let server = await (JSON.parse(localStorage.getItem('serverItems'))) || [];
-        let serverItems = server.length !== 0 && server ? (JSON.parse(localStorage.getItem('serverItems')))[0] : [];
+        let server = (JSON.parse(localStorage.getItem('serverItems'))) || [];
+        let serverItems = await server.length !== 0 && server ? (JSON.parse(localStorage.getItem('serverItems')))[0] : [];
         let user = await JSON.parse(localStorage.getItem('user')) || [];
+        console.log(localItems)
+        console.log(localCart)
         
         // check if the user has successfully loggin in
         if (user !== []) {
@@ -404,103 +417,6 @@ const Main = (props) => {
         </div>
     )
 }
-
-// find cart items
-const findCartItem = (items, inputItem, size) => {
-    let newId = inputItem.productId.concat(size);
-    return items.find(item => item.productId === newId && item);
-}
-
-// check if the item in the cart
-const sameItemInCart = (cartItems, newItem, size, qty) => {
-    let item = findCartItem(cartItems, newItem, size);
-
-    return {
-        ...item,
-        quantity: Number(item.quantity) + Number(qty)
-    }
-}
-
-// update the item in cart
-const updateItemInCart = (cartItems, updatedNewItem, auth) => {
-    let remainCartItems = cartItems.cartItems.filter(item => item.productId !== updatedNewItem.productId);
-    let userId = JSON.parse(localStorage.getItem('user')) ?
-                (JSON.parse(localStorage.getItem('user')) || [])._id :
-                "Not Register User";
-    return {
-        ...cartItems,
-        userId: userId,
-        cartItems: [
-            ...remainCartItems,
-            {...updatedNewItem}
-        ]
-    }
-}
-
-//add new item to cart
-const addCartItem = (inCartItems, newItem, size, qty, auth) => {
-
-    let productId = newItem.productId.concat(size);
-    let id = newItem.id.concat(size);
-    let userId = auth.isAuthenticated ?
-                (JSON.parse(localStorage.getItem('user')) || [])._id :
-                "Not Register User";
-    //to check it the cart data is come from server or localstorage
-    let checkInCartItems = auth.isAuthenticated ? inCartItems : inCartItems;
-
-    //check if the cart is empty
-    if (checkInCartItems === undefined || checkInCartItems.length === 0 || checkInCartItems === null) {
-        return {
-            userId: userId,
-            purchased: false,
-            cartItems: [{
-                ...newItem,
-                productId: productId,
-                id: id,
-                size: size,
-                quantity: qty,
-                date: new Date().toISOString()
-            }]
-        };
-    //cart is not empty, but items in cart are not the same
-    } else {
-        return {
-            userId: userId,
-            purchased: false,
-            cartItems: [
-                ...checkInCartItems.cartItems,
-                {
-                ...newItem,
-                productId: productId,
-                id: id,
-                size: size,
-                quantity: qty,
-                date: new Date().toISOString()
-            }
-        ]
-        };
-    }
-}
-
-//format the phonenumber
-function formatPhoneNumber(phoneNumberString) {
-    var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
-    var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
-    if (match) {
-      return '(' + match[1] + ') ' + match[2] + '-' + match[3]
-    }
-    return null
-}
-
-//find the same objects in two arrays of objests
-const findSameObjects = (firstObjs, secondObjs) => firstObjs.filter(firstObj => secondObjs.some(secondObj =>
-    secondObj.productId === firstObj.productId));
-
-//find the different object in two arrays of objects
-const findDifferetObjects = (firstObjs, secondObjs) => firstObjs.filter(firstObj => 
-    !secondObjs.some(secondObj => secondObj.productId === firstObj.productId))
-    .concat(secondObjs.filter(secondObjTwo => 
-    !firstObjs.some(firstObjTwo => secondObjTwo.productId === firstObjTwo.productId)))
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
 

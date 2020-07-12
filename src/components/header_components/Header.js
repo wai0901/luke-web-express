@@ -22,7 +22,7 @@ const Header = (props) => {
     }, []);
 
     // const windowWide = window.innerWidth;
-console.log(windowWidth)
+
     const menuHandler = () => {
         setMenu(!menu);
     }

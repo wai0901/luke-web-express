@@ -35,6 +35,7 @@ function Menu(props) {
                         <li key={route.name}><Link to={route.path} className={route.class}
                         onClick={() => {
                             props.handleHeaderCatChange(route.link);
+                            props.menuHandler();
                             return props.linksHandler
                             }}
                         >{route.name}</Link></li>

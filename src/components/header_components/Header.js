@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Menu from "./menu components/Menu";
 import Logo from "../../shared/Logo";
 import ShopModule from "./shop components/ShopModule";
@@ -9,6 +9,20 @@ const Header = (props) => {
 
     const [menu, setMenu] = useState(false);
 
+    const [windowWidth, setWindowWidth] = useState(0);
+    // 
+    let resizeWindow = () => {
+        setWindowWidth(window.innerWidth);
+    };
+
+    useEffect(() => {
+        resizeWindow();
+        window.addEventListener("resize", resizeWindow);
+        return () => window.removeEventListener("resize", resizeWindow);
+    }, []);
+
+    // const windowWide = window.innerWidth;
+console.log(windowWidth)
     const menuHandler = () => {
         setMenu(!menu);
     }
@@ -24,7 +38,7 @@ const Header = (props) => {
     }
 
     const buttonDown = {
-        top: "94vh",
+        top: windowWidth <= 375 ? "90vh" : "94vh",
         transition: "all 300ms ease-in-out",
         zIndex: "4"
     }
@@ -47,6 +61,7 @@ const Header = (props) => {
                         <Menu 
                             menuToggle={menu}
                             linksHandler={linksHandler}
+                            menuHandler={menuHandler}
                             handleHeaderCatChange={props.handleHeaderCatChange}
                         />
                     </div>

@@ -184,11 +184,11 @@ const Main = (props) => {
         let server = (JSON.parse(localStorage.getItem('serverItems'))) || [];
         let serverItems = await server.length !== 0 && server ? (JSON.parse(localStorage.getItem('serverItems')))[0] : [];
         let user = await JSON.parse(localStorage.getItem('user')) || [];
-        console.log(localItems)
-        console.log(localCart)
+
         
         // check if the user has successfully loggin in
         if (user !== []) {
+            console.log(user)
             console.log("logged in")
             //check if the cart in server is empty
             if (serverItems.length === 0 ) {

@@ -7,7 +7,7 @@ export const postCartItems = (cartItem) => dispatch => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(process.env.REACT_APP_URL + 'carts', {
+    return fetch(process.env.REACT_APP_URL + 'carts/', {
         method: 'POST',
         body: JSON.stringify(cartItem),
         headers: {
@@ -40,7 +40,7 @@ export const updateCartItems = (cartItem, id) => dispatch => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(process.env.REACT_APP_URL + 'carts/' + id, {
+    return fetch(process.env.REACT_APP_URL + 'carts/' + id + '/', {
         method: 'PUT',
         body: JSON.stringify(cartItem),
         headers: {
@@ -71,7 +71,7 @@ export const removeCartItems = id => dispatch => {
     dispatch(cartDataLoading());
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(process.env.REACT_APP_URL + 'carts/' + id, {
+    return fetch(process.env.REACT_APP_URL + 'carts/' + id + '/', {
         method: "DELETE",
         headers: {
             'Authorization': bearer
@@ -103,7 +103,7 @@ export const fetchCartData = () => dispatch => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(process.env.REACT_APP_URL + 'carts', {
+    return fetch(process.env.REACT_APP_URL + 'carts/', {
         headers: {
             'Authorization': bearer
         },
@@ -147,7 +147,7 @@ export const checkoutOrder = (order) => dispatch => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
     
-    return fetch(process.env.REACT_APP_URL + 'orders', {
+    return fetch(process.env.REACT_APP_URL + 'orders/', {
         method: 'POST',
         body: JSON.stringify(order),
         headers: {
@@ -179,7 +179,7 @@ export const ordersData = () => dispatch => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(process.env.REACT_APP_URL + 'orders', {
+    return fetch(process.env.REACT_APP_URL + 'orders/', {
         headers: {
             'Authorization': bearer
         },
@@ -223,7 +223,7 @@ export const userLogin = creds => async dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds))
 
-    return await fetch(process.env.REACT_APP_URL + 'users/login', {
+    return await fetch(process.env.REACT_APP_URL + 'users/login/', {
         method: 'POST',
         headers: { 
             'Content-Type':'application/json' 
@@ -310,7 +310,7 @@ export const logoutUser = () => (dispatch) => {
 export const signupUser = (info) => (dispatch) => {
     dispatch(signupLoading())
 
-    return fetch(process.env.REACT_APP_URL + 'users/signup', {
+    return fetch(process.env.REACT_APP_URL + 'users/signup/', {
         method: "POST",
         body: JSON.stringify(info),
         headers: {
@@ -361,7 +361,7 @@ export const fetchUsersData = () => dispatch => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(process.env.REACT_APP_URL + 'users', {
+    return fetch(process.env.REACT_APP_URL + 'users/', {
         headers: {
             'Authorization': bearer
         },
@@ -403,7 +403,7 @@ export const postContactUs = (data) => dispatch => {
 
     const bearer = 'Bearer ' + localStorage.getItem('token');
 
-    return fetch(process.env.REACT_APP_URL + 'contacts', {
+    return fetch(process.env.REACT_APP_URL + 'contacts/', {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
